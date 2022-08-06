@@ -2,3 +2,71 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.letter-boxes {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+
+  &.rtl {
+    direction: rtl;
+  }
+
+  .letter-box {
+    width: 60px;
+    height: 60px;
+    //border: 1px solid black;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 5px 1px #b7b2b2;
+    border-radius: 5px;
+
+    &.active-box {
+      box-shadow: 0px 0px 5px 1px #ff8383;
+    }
+
+    &.correct-letter {
+      box-shadow: 0px 0px 5px 1px #53f141;
+      background-color: #38f124;
+    }
+
+    &.wrong-location {
+      box-shadow: 0px 0px 5px 1px #f4a329;
+      background-color: #ee9208
+    }
+  }
+}
+
+.float-button {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
+
+.dialog-tool {
+  height: 50px;
+  background-color: #3f51b5;
+  margin-left: -24px;
+  margin-top: -24px;
+  margin-right: -24px;
+  display: flex;
+
+  .dialog-title {
+    color: white;
+    align-self: center;
+    font-size: large;
+    padding: 10px;
+  }
+}
+
+@media(max-width: 650px) {
+  .letter-boxes {
+    .letter-box {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
