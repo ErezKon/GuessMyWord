@@ -1,0 +1,3 @@
+<div *ngFor="let row of layout" class="letter-boxes">
+  <div *ngFor="let letter of row" class="letter-box" (click)="onKeyPressed(letter)">{{letter}}</div>
+</div>
