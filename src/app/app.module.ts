@@ -12,6 +12,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { environment } from 'src/environments/environment';
+import { WordsContainerComponent } from './words/words-container/words-container.component';
+import { AddWordComponent } from './words/add-word/add-word.component';
+import { WordsComponent } from './words/word/word.component';
+import { WordContainerComponent } from './words/word-container/word-container.component';
+import { KeyboardComponent } from './utils/keyboard/keyboard/keyboard.component';
+import { MaterialModule } from './material/material.module';
+import { AuthorizationComponent } from './auth/authorization/authorization.component';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -20,7 +29,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    WordsContainerComponent,
+    WordsComponent,
+    AddWordComponent,
+    WordContainerComponent,
+    KeyboardComponent,
+    AuthorizationComponent
   ],
   imports: [
     BrowserModule,
@@ -30,11 +45,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateModule.forRoot({
       defaultLanguage: 'en'
     }),
+    MaterialModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
