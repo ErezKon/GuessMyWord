@@ -1,0 +1,14 @@
+.icon-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+
+  .icon-label {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: larger;
+    cursor: pointer;
+  }
+}
