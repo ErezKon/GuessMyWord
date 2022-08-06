@@ -24,7 +24,7 @@ export class KeyboardComponent implements OnInit, OnDestroy {
 
   constructor(private cdRef: ChangeDetectorRef) { }
   ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
+    this.langSub?.unsubscribe();
   }
 
   ngOnInit(): void {
