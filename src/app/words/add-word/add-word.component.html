@@ -12,4 +12,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="addWord()" [disabled]="disableAddWord">Add Word</button>
+  <div class="forbidden-word" *ngIf="forbidden">
+    The selected word is forbidden. Please choose a new word.
+  </div>
 </mat-dialog-actions>

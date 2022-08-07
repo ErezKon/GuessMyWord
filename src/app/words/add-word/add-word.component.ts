@@ -22,6 +22,8 @@ export class AddWordComponent implements OnInit, OnDestroy {
 
   lang = new BehaviorSubject<string>(environment.defaultLanguage.value);
 
+  forbidden: boolean = false;
+
   private subscriptions = new Array<Subscription>();
 
   private blacklist!: Map<string, Blacklist>;
@@ -50,6 +52,15 @@ export class AddWordComponent implements OnInit, OnDestroy {
   }
 
   addWord() {
+    const blacklist = this.blacklist.get(this.selectedLanguage);
+    const forbidden = blacklist?.forbiddenWords.find(w => w === this.word);
+    if(forbidden) {
+      this.forbidden = true;
+      this.word = '';
+      return;
+    } else {
+      this.forbidden = false;
+    }
     this.dialogRef.close({word:this.word, language: this.selectedLanguage});
   }
 
