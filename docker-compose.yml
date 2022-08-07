@@ -1,0 +1,8 @@
+version: '3'
+services:
+  guess-my-word:
+    container_name: guess-my-word
+    build: .
+    restart: always
+    ports:
+      - "30120:80"
