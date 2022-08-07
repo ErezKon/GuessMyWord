@@ -14,13 +14,15 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { environment } from 'src/environments/environment';
 import { WordsContainerComponent } from './words/words-container/words-container.component';
 import { AddWordComponent } from './words/add-word/add-word.component';
-import { WordsComponent } from './words/word/word.component';
+import { WordComponent } from './words/word/word.component';
+import { WordsComponent } from './words/words/words.component';
 import { WordContainerComponent } from './words/word-container/word-container.component';
 import { KeyboardComponent } from './utils/keyboard/keyboard/keyboard.component';
 import { MaterialModule } from './material/material.module';
 import { AuthorizationComponent } from './auth/authorization/authorization.component';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { LanguageSelectorComponent } from './utils/language-selector/language-selector.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -31,11 +33,13 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     WordsContainerComponent,
+    WordComponent,
     WordsComponent,
     AddWordComponent,
     WordContainerComponent,
     KeyboardComponent,
-    AuthorizationComponent
+    AuthorizationComponent,
+    LanguageSelectorComponent
   ],
   imports: [
     BrowserModule,
