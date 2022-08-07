@@ -16,10 +16,9 @@ export class AddWordComponent implements OnInit, OnDestroy {
 
   disableAddWord = true;
 
-
   languages = environment.languages;
 
-  selectedLanguage = environment.defaultLanguage.value
+  selectedLanguage = environment.defaultLanguage.value;
 
   lang = new BehaviorSubject<string>(environment.defaultLanguage.value);
 
@@ -55,7 +54,8 @@ export class AddWordComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChange(event: any) {
-    this.lang.next(this.selectedLanguage);
+    this.lang.next(event.value);
+    this.selectedLanguage = event.value;
     this.word = '';
     this.disableAddWord = true;
   }
