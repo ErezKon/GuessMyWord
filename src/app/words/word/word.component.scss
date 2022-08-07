@@ -20,6 +20,16 @@
   }
 }
 
+.solved {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  color: #60ca22;
+  font-size: 30px;
+  font-weight: bold;
+}
+
 @media(max-width: 650px) {
   .word-boxes {
     .word-box {

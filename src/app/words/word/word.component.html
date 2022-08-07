@@ -11,4 +11,7 @@
     {{letters[i][j]}}
   </div>
 </div>
-<app-keyboard [language]="language" (keyPressed)="onKeyPressed($event)"></app-keyboard>
+<app-keyboard *ngIf="!solved" [language]="language" (keyPressed)="onKeyPressed($event)"></app-keyboard>
+<div *ngIf="solved" class="solved">
+  Solved the word in {{activeI + 1}} tries
+</div>
