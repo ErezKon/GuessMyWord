@@ -37,21 +37,13 @@ export class WordComponent implements OnInit {
   }
 
   onKeyPressed(key: string) {
-    this.letters[this.activeI][this.activeJ] = key;
-    const box = document.getElementById(`letter-box-${this.activeI}-${this.activeJ}`);
-    box?.classList.remove('correct-letter');
-    box?.classList.remove('wrong-location');
-    if(key === (this.word as Word)?.word[this.activeJ]) {
-      box?.classList.add('correct-letter');
-    } else if((this.word as Word)?.word.indexOf(key) !== -1 && (this.word as Word)?.word.indexOf(key) !== this.activeJ) {
-      box?.classList.add('wrong-location');
-    }
+    this.letters[this.activeI][this.activeJ] = key
     this.activeJ++;
-    if(this.activeJ >= (this.word as Word)?.word.length) {
+    if (this.activeJ >= (this.word as Word)?.word.length) {
+      this.markBoxes();
       const guessedWord = this.letters[this.activeI].join('');
-      if(guessedWord === this.word?.word) {
+      if (guessedWord === this.word?.word) {
         this.solved = true;
-        //alert(`guessed the word on ${this.activeI + 1} tries!`);
         return;
       }
       this.activeI++;
@@ -59,8 +51,22 @@ export class WordComponent implements OnInit {
     }
   }
 
+  private markBoxes() {
+    const word = (this.word as Word).word;
+    for (let i = 0; i < (this.word as Word).word.length; i++) {
+      const letter = this.letters[this.activeI][i];
+      const box = document.getElementById(`letter-box-${this.activeI}-${i}`);
+      const letterIndex = word.indexOf(letter);
+      if (letterIndex === i) {
+        box?.classList.add('correct-letter');
+      } else if(letterIndex !== -1) {
+        box?.classList.add('wrong-location');
+      }
+    }
+  }
+
   onLetterClick(i: number, j: number) {
-    if(this.activeI === i) {
+    if (this.activeI === i) {
       this.activeJ = j;
     }
   }
