@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class WordsService implements OnDestroy {
 
   private blacklists = new Map<string,Blacklist>();
+  private allWords = new Map<string, Observable<Word[]>>();
   private subscriptions = new Array<Subscription>();
   private subject = new BehaviorSubject<Map<string,Blacklist>> (this.blacklists);
 
@@ -22,7 +23,7 @@ export class WordsService implements OnDestroy {
       const sub = this.getLanguageBlacklist(lang.value).subscribe(b => {
         this.blacklists.set(lang.value, b);
         this.subject.next(this.blacklists);
-        console.log(this.blacklists);
+        this.fetchAllWords(lang.value);
       });
     }
   }
@@ -52,18 +53,39 @@ export class WordsService implements OnDestroy {
     if (!collectionName || !word) {
       return of({} as Word);
     }
+    if(this.allWords.has(collectionName)) {
+      console.log('getting word from cache');
+      return (this.allWords.get(collectionName) as Observable<Word[]>)
+      .pipe(map(words => words.find(w => w.id === word) as Word));
+    }
+    console.log('fetching word from db');
     const document = doc(this.firestore, `${collectionName}/${word}`);
     return docData(document, { idField: 'id' })
-      .pipe(map(w => {
-        if (w) {
-          return {
-            id: w['id'],
-            word: w['word'],
-            createdBy: w['createdBy']
-          } as Word;
-        }
-        return {} as Word;
-      }));
+      .pipe(map(w => this.convertToWord(w)));
+  }
+
+  getAll(collectionName: string): Observable<Word[]> {
+    if(this.allWords.has(collectionName)) {
+      return this.allWords.get(collectionName) as Observable<Word[]>;
+    }
+    const words = this.fetchAllWords(collectionName);
+    this.allWords.set(collectionName, words);
+    return words;
+  };
+
+  private fetchAllWords(collectionName: string): Observable<Word[]>  {
+    const col = collection(this.firestore, collectionName)
+    const ret = collectionData(col)
+    .pipe(map(data => {
+      return data.filter(d => d['word'] !== undefined)
+      .map(w => this.convertToWord(w));
+    }));
+
+    return ret;
+  }
+
+  getBlackList(): Observable<Map<string,Blacklist>> {
+    return this.subject.asObservable();
   }
 
   private getLanguageBlacklist(language: string): Observable<Blacklist> {
@@ -77,7 +99,14 @@ export class WordsService implements OnDestroy {
       }));
   }
 
-  getBlackList(): Observable<Map<string,Blacklist>> {
-    return this.subject.asObservable();
+  private convertToWord(doc: DocumentData): Word {
+    if (doc) {
+      return {
+        id: doc['id'],
+        word: doc['word'],
+        createdBy: doc['createdBy']
+      } as Word;
+    }
+    return {} as Word;
   }
 }
