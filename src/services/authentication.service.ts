@@ -68,8 +68,6 @@ export class AuthenticationService {
     };
     localStorage.setItem('user', JSON.stringify(user));
 
-    console.log(this.isLoggedIn);
-
     return userRef.set(userData, {
       merge: true,
     });
