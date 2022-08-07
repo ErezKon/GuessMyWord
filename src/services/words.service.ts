@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { Firestore, collection, docData, collectionData, DocumentData, doc } from '@angular/fire/firestore';
+import { Firestore, collection, docData, collectionData, DocumentData, doc, arrayUnion } from '@angular/fire/firestore';
+import * as firebase from 'firebase/compat';
 import { BehaviorSubject, map, Observable, of, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Blacklist } from 'src/models/blacklist.model';
@@ -37,12 +38,17 @@ export class WordsService implements OnDestroy {
   addWord(collectionName: string, word: string): string {
     const id = uuidv4();
     const docName = `${collectionName}/${id}`;
+    const idsDoc = `${collectionName}/ids`;
     const docRef: AngularFirestoreDocument<any> = this.afs.doc(docName);
+    const idsRef: AngularFirestoreDocument<any> = this.afs.doc(idsDoc);
 
     docRef.set(
       {
         id: id,
         word: word
+      });
+      idsRef.update({
+        ids: arrayUnion(id)
       });
 
       return docName;
