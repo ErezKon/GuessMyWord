@@ -1,10 +1,14 @@
-<div class="float-button">
-  <button
-  mat-mini-fab
-  color="primary"
-  aria-label="Add word"
-  (click)="addWord()">
-  <mat-icon>add</mat-icon>
-</button>
+<div class="words-container">
+  <div class="language-selecter">
+    <app-language-selector [(value)]="selectedLanguage" (selectionChange)="onSelectionChange($event)">
+    </app-language-selector>
+  </div>
 </div>
-
+<div class="words">
+  <app-words *ngFor="let word of (words$ | async); let i = index" [word]="word" [language]="selectedLanguage" [index]="i"></app-words>
+</div>
+<div class="float-button">
+  <button mat-mini-fab color="primary" aria-label="Add word" (click)="addWord()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

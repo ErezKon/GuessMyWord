@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Word } from 'src/models/word.model';
 import { WordsService } from 'src/services/words.service';
 import { AddWordComponent } from '../add-word/add-word.component';
 
@@ -10,9 +13,14 @@ import { AddWordComponent } from '../add-word/add-word.component';
 })
 export class WordsContainerComponent implements OnInit {
 
+  selectedLanguage = environment.defaultLanguage.value;
+
+  words$!: Observable<Word[]>;
+
   constructor(public dialog: MatDialog, private wordService: WordsService) { }
 
   ngOnInit(): void {
+    this.words$ = this.wordService.getAll(this.selectedLanguage);
   }
 
   addWord() {
@@ -21,11 +29,15 @@ export class WordsContainerComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if (result) {
         this.wordService.addWord(result.language, result.word);
       }
     });
+  }
+
+  onSelectionChange(event: any) {
+    this.selectedLanguage = event.value;
+    this.words$ = this.wordService.getAll(this.selectedLanguage);
   }
 
 }
