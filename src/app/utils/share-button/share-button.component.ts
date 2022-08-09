@@ -39,9 +39,6 @@ export class ShareButtonComponent implements OnInit {
         this.shareUrl = urlEncoder.encodeKey(`https://www.facebook.com/sharer/sharer.php?u=${this.url}`);
         break;
       case 'whatsapp':
-        // this.shareUrl = this.isDesktop ?
-        //   urlEncoder.encodeKey(`https://web.whatsapp.com/send?text=${this.url}`) :
-        //   urlEncoder.encodeKey(`https://wa.me?text=${this.url}`);
         this.shareUrl = urlEncoder.encodeKey(`https://wa.me?text=${this.url}`);
         break;
 
