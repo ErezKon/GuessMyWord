@@ -47,6 +47,8 @@ export class ShareButtonComponent implements OnInit {
       default:
         break;
     }
+
+    alert(this.shareUrl);
   }
 
   ngOnInit(): void {
