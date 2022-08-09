@@ -34,22 +34,15 @@ export class WordsContainerComponent implements OnInit {
 
   constructor(private store: Store<IAppState>,
     public dialog: MatDialog,
-    private wordService: WordsService,
-    /*private loadingService: LoadingService*/) { }
+    private wordService: WordsService) { }
 
   ngOnInit(): void {
-    this.loading$ = this.store.pipe(select(selectLoading));//this.loadingService.isLoading;
-    this.hasWord$ = this.store.pipe(select(selectHasWord));/*this.word$?.pipe(map(w => {
-      const word = w as Word
-      console.log('has word:');
-      console.log(word);
-      return word?.id !== '-1';
-    }))*/
+    this.loading$ = this.store.pipe(select(selectLoading));
+    this.hasWord$ = this.store.pipe(select(selectHasWord));
     this.store.dispatch(wordsActions.getLanguagesIds({language: this.selectedLanguage}));
     this.subscriptions.push(this.store.pipe(select(selectLanguageIds)).subscribe(ids => {
       this.ids = ids;
       this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage}));
-      //this.word$ = this.wordService.getRandomWord(this.selectedLanguage, ids);
       this.word$ = this.store.pipe(select(selectWord));
     }))
   }
@@ -69,14 +62,11 @@ export class WordsContainerComponent implements OnInit {
   onSelectionChange(event: any) {
     this.selectedLanguage = event.value;
     this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage}));
-    //this.word$ = this.wordService.getRandomWord(this.selectedLanguage, this.ids);
   }
 
   onResetWordsCache() {
     localStorage.setItem('ids', '[]');
-    //this.store.dispatch(wordsActions.resetLanguageIds());
     this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage}));
-    //this.word$ = this.wordService.getRandomWord(this.selectedLanguage, this.ids);
   }
 
 }

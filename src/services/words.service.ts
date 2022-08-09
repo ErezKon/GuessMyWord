@@ -35,7 +35,6 @@ export class WordsService implements OnDestroy {
           this.ids.set(lang.value, ids);
         }));
         this.subject.next(this.blacklists);
-        //this.fetchAllWords(lang.value);
       });
     }
   }
@@ -63,7 +62,6 @@ export class WordsService implements OnDestroy {
     });
 
     return docName;
-    //this.firestore.collection('collectionName').add({name : this.name, personalInfo : this.personalInfo});
   }
 
   getWord(collectionName: string, word: string, loadingIncreased: boolean = false): Observable<Word> {
@@ -75,34 +73,21 @@ export class WordsService implements OnDestroy {
       return (this.allWords.get(collectionName) as Observable<Word[]>)
         .pipe(map(words => words.find(w => w.id === word) as Word));
     }
-    // if (!loadingIncreased) {
-    //   this.loadingService.increase('get word');
-    // }
     console.log('fetching word from db');
     const document = doc(this.firestore, `${collectionName}/${word}`);
     return docData(document, { idField: 'id' })
       .pipe(map(w => {
-        // if (w) {
-        //   this.loadingService.decrease('get word pipe');
-        // }
         return this.convertToWord(w);
       }));
   }
 
   getRandomWord(language: string, ids: string[]): Observable<Word> {
     let randomId: string | null = '';
-    //this.loadingService.increase('get random word');
 
     const usedIds: string[] = JSON.parse(localStorage.getItem('ids') as string) ?? [];
     let index = 0;
     randomId = this.getRandomId(ids, usedIds);
-    // while (randomId === '' || (usedIds.indexOf(randomId) !== -1 && index < ids.length)) {
-    //   randomId = shuffle(ids)[Math.floor(Math.random() * ids.length)] as string;
-    //   index++;
-    // };
-    //if (usedIds.indexOf(randomId) !== -1 || index >= ids.length) {
     if (randomId === null) {
-      //this.loadingService.decrease('get random word - used all words');
       return of({
         id: '-1',
         word: ''
@@ -125,13 +110,9 @@ export class WordsService implements OnDestroy {
   }
 
   getLanguageIds(language: string): Observable<string[]> {
-    //this.loadingService.increase('get language ids');
     const document = doc(this.firestore, `${language}/ids`);
     return docData(document)
       .pipe(map(id => {
-        // if(id) {
-        //   this.loadingService.decrease('get language ids');
-        // }
         return id["ids"] as string[];
       }));
   }
