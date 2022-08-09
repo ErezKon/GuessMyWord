@@ -3,12 +3,32 @@
     <app-language-selector [(value)]="selectedLanguage" (selectionChange)="onSelectionChange($event)">
     </app-language-selector>
   </div>
-</div>
-<div class="words">
-  <app-words *ngFor="let word of (words$ | async); let i = index" [word]="word" [language]="selectedLanguage" [index]="i"></app-words>
-</div>
-<div class="float-button">
-  <button mat-mini-fab color="primary" aria-label="Add word" (click)="addWord()">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>
+  <div class="words" *ngIf="!(loading$ | async); else loading;">
+    <app-word *ngIf="(hasWord$ | async); else noWord;" [word]="word$ | async" [language]="selectedLanguage"
+      (resetWordsCache)="onResetWordsCache()"></app-word>
+  </div>
+  <div class="float-button">
+    <button mat-mini-fab color="primary" aria-label="Add word" (click)="addWord()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <ng-template #loading>
+    <div class="spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+
+  <ng-template #noWord>
+    <div class="no-words" *ngIf="!(loading$ | async)">
+      <div class="message">
+        No words found, or you solved all the words.
+      </div>
+      <div class="reset">
+        If you wish you can reset the words memory and replay.
+      </div>
+      <div class="reset-button">
+        <button mat-raised-button color="primary"(click)="onResetWordsCache()">Reset</button>
+      </div>
+    </div>
+  </ng-template>

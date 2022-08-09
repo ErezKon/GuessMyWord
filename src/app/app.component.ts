@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { WordsService } from 'src/services/words.service';
 import { AuthorizationComponent } from './auth/authorization/authorization.component';
@@ -13,6 +14,8 @@ import { AuthorizationComponent } from './auth/authorization/authorization.compo
 })
 export class AppComponent {
   title = 'GuessMyWord';
+
+  selectedLanguage = environment.defaultLanguage;
 
   constructor(private wordsService: WordsService,
     public dialog: MatDialog,

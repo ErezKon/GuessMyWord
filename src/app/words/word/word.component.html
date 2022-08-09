@@ -1,17 +1,12 @@
-<div
-  *ngFor="let _ of [].constructor(6); let i=index"
-  class="letter-boxes"
-  [ngClass]="{'rtl': language === 'hebrew'}">
-  <div
-    id="letter-box-{{i}}-{{j}}"
-    *ngFor="let _ of [].constructor(word?.word?.length ?? 0); let j=index"
-    class="letter-box"
-    [ngClass]="{'active-box': activeI === i && activeJ === j}"
-    (click)="onLetterClick(i,j)">
-    {{letters[i][j]}}
+  <div class="random-word" *ngIf="hasWord">
+    <div *ngFor="let _ of [].constructor(6); let i=index" class="letter-boxes" [ngClass]="{'rtl': language === 'hebrew'}">
+      <div id="letter-box-{{i}}-{{j}}" *ngFor="let _ of [].constructor(word?.word?.length ?? 0); let j=index"
+        class="letter-box" [ngClass]="{'active-box': activeI === i && activeJ === j}" (click)="onLetterClick(i,j)">
+        {{letters[i][j]}}
+      </div>
+    </div>
+    <app-keyboard *ngIf="!solved" [language]="language" (keyPressed)="onKeyPressed($event)"></app-keyboard>
+    <div *ngIf="solved" class="solved">
+      Solved the word in {{activeI + 1}} tries
+    </div>
   </div>
-</div>
-<app-keyboard *ngIf="!solved" [language]="language" (keyPressed)="onKeyPressed($event)"></app-keyboard>
-<div *ngIf="solved" class="solved">
-  Solved the word in {{activeI + 1}} tries
-</div>

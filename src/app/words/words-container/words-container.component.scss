@@ -1,0 +1,10 @@
+.no-words {
+  margin-top: 25px;
+
+  .message, .reset, .reset-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+  }
+}

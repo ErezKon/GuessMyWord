@@ -3,28 +3,39 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat
 import { Firestore, collection, docData, collectionData, DocumentData, doc, arrayUnion } from '@angular/fire/firestore';
 import * as firebase from 'firebase/compat';
 import { BehaviorSubject, map, Observable, of, Subscription } from 'rxjs';
+import { shuffle } from 'src/app/utils/functions/array.shuffle';
 import { environment } from 'src/environments/environment';
 import { Blacklist } from 'src/models/blacklist.model';
 import { Word } from 'src/models/word.model';
 
 import { v4 as uuidv4 } from 'uuid';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WordsService implements OnDestroy {
 
-  private blacklists = new Map<string,Blacklist>();
+  private blacklists = new Map<string, Blacklist>();
   private allWords = new Map<string, Observable<Word[]>>();
+  private ids = new Map<string, string[]>();
   private subscriptions = new Array<Subscription>();
-  private subject = new BehaviorSubject<Map<string,Blacklist>> (this.blacklists);
+  private subject = new BehaviorSubject<Map<string, Blacklist>>(this.blacklists);
 
-  constructor(private firestore: Firestore, private afs: AngularFirestore) {
+  constructor(private firestore: Firestore, private afs: AngularFirestore, private loadingService: LoadingService) {
+
+    if (!localStorage.getItem('ids')) {
+      localStorage.setItem('ids', '[]');
+    }
+
     for (const lang of environment.languages) {
       const sub = this.getLanguageBlacklist(lang.value).subscribe(b => {
         this.blacklists.set(lang.value, b);
+        this.subscriptions.push(this.getLanguageIds(lang.value).subscribe(ids => {
+          this.ids.set(lang.value, ids);
+        }));
         this.subject.next(this.blacklists);
-        this.fetchAllWords(lang.value);
+        //this.fetchAllWords(lang.value);
       });
     }
   }
@@ -47,31 +58,61 @@ export class WordsService implements OnDestroy {
         id: id,
         word: word
       });
-      idsRef.update({
-        ids: arrayUnion(id)
-      });
+    idsRef.update({
+      ids: arrayUnion(id)
+    });
 
-      return docName;
+    return docName;
     //this.firestore.collection('collectionName').add({name : this.name, personalInfo : this.personalInfo});
   }
 
-  getWord(collectionName: string, word: string): Observable<Word> {
+  getWord(collectionName: string, word: string, loadingIncreased: boolean = false): Observable<Word> {
     if (!collectionName || !word) {
       return of({} as Word);
     }
-    if(this.allWords.has(collectionName)) {
+    if (this.allWords.has(collectionName)) {
       console.log('getting word from cache');
       return (this.allWords.get(collectionName) as Observable<Word[]>)
-      .pipe(map(words => words.find(w => w.id === word) as Word));
+        .pipe(map(words => words.find(w => w.id === word) as Word));
     }
+    // if (!loadingIncreased) {
+    //   this.loadingService.increase('get word');
+    // }
     console.log('fetching word from db');
     const document = doc(this.firestore, `${collectionName}/${word}`);
     return docData(document, { idField: 'id' })
-      .pipe(map(w => this.convertToWord(w)));
+      .pipe(map(w => {
+        // if (w) {
+        //   this.loadingService.decrease('get word pipe');
+        // }
+        return this.convertToWord(w);
+      }));
+  }
+
+  getRandomWord(language: string, ids: string[]): Observable<Word> {
+    let randomId: string | null = '';
+    //this.loadingService.increase('get random word');
+
+    const usedIds: string[] = JSON.parse(localStorage.getItem('ids') as string) ?? [];
+    let index = 0;
+    randomId = this.getRandomId(ids, usedIds);
+    // while (randomId === '' || (usedIds.indexOf(randomId) !== -1 && index < ids.length)) {
+    //   randomId = shuffle(ids)[Math.floor(Math.random() * ids.length)] as string;
+    //   index++;
+    // };
+    //if (usedIds.indexOf(randomId) !== -1 || index >= ids.length) {
+    if (randomId === null) {
+      //this.loadingService.decrease('get random word - used all words');
+      return of({
+        id: '-1',
+        word: ''
+      } as Word);
+    }
+    return this.getWord(language, randomId, true);
   }
 
   getAll(collectionName: string): Observable<Word[]> {
-    if(this.allWords.has(collectionName)) {
+    if (this.allWords.has(collectionName)) {
       return this.allWords.get(collectionName) as Observable<Word[]>;
     }
     const words = this.fetchAllWords(collectionName);
@@ -79,19 +120,46 @@ export class WordsService implements OnDestroy {
     return words;
   };
 
-  private fetchAllWords(collectionName: string): Observable<Word[]>  {
-    const col = collection(this.firestore, collectionName)
-    const ret = collectionData(col)
-    .pipe(map(data => {
-      return data.filter(d => d['word'] !== undefined)
-      .map(w => this.convertToWord(w));
-    }));
-
-    return ret;
+  getBlackList(): Observable<Map<string, Blacklist>> {
+    return this.subject.asObservable();
   }
 
-  getBlackList(): Observable<Map<string,Blacklist>> {
-    return this.subject.asObservable();
+  getLanguageIds(language: string): Observable<string[]> {
+    //this.loadingService.increase('get language ids');
+    const document = doc(this.firestore, `${language}/ids`);
+    return docData(document)
+      .pipe(map(id => {
+        // if(id) {
+        //   this.loadingService.decrease('get language ids');
+        // }
+        return id["ids"] as string[];
+      }));
+  }
+
+  private getRandomId(ids: string[], usedIds: string[]): string | null {
+    if (!ids) {
+      return null;
+    }
+    if (!usedIds) {
+      usedIds = [];
+    }
+    const filtered = ids.filter(id => usedIds.indexOf(id) === -1);
+    if (filtered.length === 0) {
+      return null;
+    }
+    const randomId = shuffle(filtered)[Math.floor(Math.random() * filtered.length)] as string;
+    return randomId;
+  }
+
+  private fetchAllWords(collectionName: string): Observable<Word[]> {
+    const col = collection(this.firestore, collectionName)
+    const ret = collectionData(col)
+      .pipe(map(data => {
+        return data.filter(d => d['word'] !== undefined)
+          .map(w => this.convertToWord(w));
+      }));
+
+    return ret;
   }
 
   private getLanguageBlacklist(language: string): Observable<Blacklist> {
@@ -106,13 +174,17 @@ export class WordsService implements OnDestroy {
   }
 
   private convertToWord(doc: DocumentData): Word {
+    let convertedWord;
     if (doc) {
-      return {
+      convertedWord = {
         id: doc['id'],
         word: doc['word'],
         createdBy: doc['createdBy']
       } as Word;
+    } else {
+      convertedWord = {} as Word;
     }
-    return {} as Word;
+    console.log(convertedWord);
+    return convertedWord;
   }
 }

@@ -6,12 +6,11 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { StoreModule } from '@ngrx/store';
+import { ActionReducer, StoreModule } from '@ngrx/store';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { environment } from 'src/environments/environment';
 import { WordsContainerComponent } from './words/words-container/words-container.component';
 import { AddWordComponent } from './words/add-word/add-word.component';
 import { WordComponent } from './words/word/word.component';
@@ -23,11 +22,26 @@ import { AuthorizationComponent } from './auth/authorization/authorization.compo
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { LanguageSelectorComponent } from './utils/language-selector/language-selector.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from '../state-management/effects/app.effects';
+
+import { appReducers } from 'src/state-management/reducers/app.reducer';
+import { IAppState } from 'src/state-management/states/app.state';
+import { storeLogger } from 'ngrx-store-logger';
+import { WordsEffects } from 'src/state-management/effects/words.effects';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
+
+export function logger(reducer: ActionReducer<IAppState>): any {
+  return storeLogger()(reducer);
+}
+
+export const metaReducers = environment.production ? [] : [logger];
 
 @NgModule({
   declarations: [
@@ -45,16 +59,20 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
     TranslateModule.forRoot({
       defaultLanguage: 'en'
     }),
     MaterialModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    StoreModule.forRoot(appReducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([AppEffects, WordsEffects])
   ],
   providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
