@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  appUrl: 'http://localhost:9099',
+  appUrl: 'http://213.57.171.199:30120',
   firebase: {
     apiKey: "AIzaSyAGI20pwFF9seMovFRKPCv9E08c--kNGYY",
     authDomain: "guessmyword-cae56.firebaseapp.com",
