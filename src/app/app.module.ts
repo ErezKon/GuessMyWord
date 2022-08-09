@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { ShareButtonModule } from 'ngx-sharebuttons/button';
@@ -33,8 +33,9 @@ import { appReducers } from 'src/state-management/reducers/app.reducer';
 import { IAppState } from 'src/state-management/states/app.state';
 import { storeLogger } from 'ngrx-store-logger';
 import { WordsEffects } from 'src/state-management/effects/words.effects';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { ShareButtonComponent } from './utils/share-button/share-button.component';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { UniversalDeviceDetectorService } from 'src/services/universal-device-detector.service';
 
 
 // AoT requires an exported function for factories
@@ -48,7 +49,6 @@ export function logger(reducer: ActionReducer<IAppState>): any {
 
 export const metaReducers = environment.production ? [] : [logger];
 
-library.add();
 
 @NgModule({
   declarations: [
@@ -60,7 +60,8 @@ library.add();
     WordContainerComponent,
     KeyboardComponent,
     AuthorizationComponent,
-    LanguageSelectorComponent
+    LanguageSelectorComponent,
+    ShareButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -76,11 +77,15 @@ library.add();
     StoreModule.forRoot(appReducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects, WordsEffects]),
-    ShareButtonModule,
-    FontAwesomeModule
   ],
-  providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
+    {
+      provide: DeviceDetectorService,
+      useClass: UniversalDeviceDetectorService
+    }],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
 

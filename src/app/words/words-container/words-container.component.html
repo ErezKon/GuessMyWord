@@ -7,7 +7,7 @@
     <app-word *ngIf="(hasWord$ | async); else noWord;" [word]="word$ | async" [language]="selectedLanguage"
       (resetWordsCache)="onResetWordsCache()"></app-word>
   </div>
-  <div class="float-button float-right">
+  <div class="float-button float-right" *ngIf="(hasWord$ | async)">
     <button
       mat-icon-button
       [matMenuTriggerFor]="menu"
@@ -17,9 +17,13 @@
       matTooltipClass="tooltip-custom">
       <mat-icon>ios_share</mat-icon>
     </button>
-    <mat-menu #menu="matMenu" class="share-button">
-      <share-button button="facebook" [url]="(wordUrl$ | async) ?? ''"></share-button>
-      <share-button button="whatsapp" [url]="(wordUrl$ | async) ?? ''"></share-button>
+    <mat-menu #menu="matMenu" class="share-button" [panelClass]="'test-panel-class'" [backdropClass]="'test-overlay-class'">
+      <div mat-menu-item class="icon-share-menu">
+        <app-share-button  [icon]="'facebook'" [url$]="wordUrl$"></app-share-button>
+      </div>
+      <div mat-menu-item class="icon-share-menu">
+        <app-share-button  [icon]="'whatsapp'" [url$]="wordUrl$"></app-share-button>
+      </div>
     </mat-menu>
   </div>
   <div class="float-button float-left">

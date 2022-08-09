@@ -84,6 +84,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   color: white;
 }
 
+.mat-menu-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-menu-panel {
+  &.share-button {
+    width: 55px;
+    min-width: unset;
+    max-width: unset;
+    margin-bottom: 10px;
+  }
+}
+
 @media(max-width: 650px) {
   .letter-boxes {
     .letter-box {

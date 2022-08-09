@@ -30,6 +30,10 @@ export class AppComponent {
       `facebook`,
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/facebook-96.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      `whatsapp`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/WhatsApp.svg')
+    );
   }
 
   onLogin() {
