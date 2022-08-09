@@ -41,7 +41,7 @@ export class ShareButtonComponent implements OnInit {
       case 'whatsapp':
         this.shareUrl = this.isDesktop ?
           urlEncoder.encodeKey(`https://web.whatsapp.com/send?text=${this.url}`) :
-          urlEncoder.encodeKey(`whatsapp://send?text=${this.url}`);
+          urlEncoder.encodeKey(`whatsapp://send?text=test`);
         break;
 
       default:
