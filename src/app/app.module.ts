@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { ShareButtonModule } from 'ngx-sharebuttons/button';
+
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
@@ -31,6 +33,9 @@ import { appReducers } from 'src/state-management/reducers/app.reducer';
 import { IAppState } from 'src/state-management/states/app.state';
 import { storeLogger } from 'ngrx-store-logger';
 import { WordsEffects } from 'src/state-management/effects/words.effects';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -42,6 +47,8 @@ export function logger(reducer: ActionReducer<IAppState>): any {
 }
 
 export const metaReducers = environment.production ? [] : [logger];
+
+library.add();
 
 @NgModule({
   declarations: [
@@ -68,7 +75,9 @@ export const metaReducers = environment.production ? [] : [logger];
     BrowserAnimationsModule,
     StoreModule.forRoot(appReducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([AppEffects, WordsEffects])
+    EffectsModule.forRoot([AppEffects, WordsEffects]),
+    ShareButtonModule,
+    FontAwesomeModule
   ],
   providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
   bootstrap: [AppComponent]

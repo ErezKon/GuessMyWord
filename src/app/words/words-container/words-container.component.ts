@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { map, Observable, Subscription } from 'rxjs';
+import { map, Observable, of, Subscription } from 'rxjs';
 import { shuffle } from 'src/app/utils/functions/array.shuffle';
 import { environment } from 'src/environments/environment';
 import { Word } from 'src/models/word.model';
@@ -12,6 +12,7 @@ import { IAppState } from 'src/state-management/states/app.state';
 import { AddWordComponent } from '../add-word/add-word.component';
 
 import * as wordsActions from '../../../state-management/actions/words.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-words-container',
@@ -32,9 +33,12 @@ export class WordsContainerComponent implements OnInit {
 
   hasWord$!: Observable<boolean>;
 
+  wordUrl$!: Observable<string>;
+
   constructor(private store: Store<IAppState>,
     public dialog: MatDialog,
-    private wordService: WordsService) { }
+    private wordService: WordsService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loading$ = this.store.pipe(select(selectLoading));
@@ -44,6 +48,12 @@ export class WordsContainerComponent implements OnInit {
       this.ids = ids;
       this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage}));
       this.word$ = this.store.pipe(select(selectWord));
+    }));
+    this.wordUrl$ = this.word$.pipe(map(word => {
+      if(!word) {
+        return '';
+      }
+      return `${environment.appUrl}/word/${this.selectedLanguage}/${word.id}`;
     }))
   }
 

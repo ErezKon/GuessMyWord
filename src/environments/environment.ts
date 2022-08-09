@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  appUrl: 'http://213.57.171.199:30120',
   firebase: {
     apiKey: "AIzaSyAGI20pwFF9seMovFRKPCv9E08c--kNGYY",
     authDomain: "guessmyword-cae56.firebaseapp.com",

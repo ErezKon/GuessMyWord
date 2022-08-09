@@ -7,8 +7,29 @@
     <app-word *ngIf="(hasWord$ | async); else noWord;" [word]="word$ | async" [language]="selectedLanguage"
       (resetWordsCache)="onResetWordsCache()"></app-word>
   </div>
-  <div class="float-button">
-    <button mat-mini-fab color="primary" aria-label="Add word" (click)="addWord()">
+  <div class="float-button float-right">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Share word on social media"
+      matTooltip="Share word on social media"
+      matTooltipPosition="right"
+      matTooltipClass="tooltip-custom">
+      <mat-icon>ios_share</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="share-button">
+      <share-button button="facebook" [url]="(wordUrl$ | async) ?? ''"></share-button>
+      <share-button button="whatsapp" [url]="(wordUrl$ | async) ?? ''"></share-button>
+    </mat-menu>
+  </div>
+  <div class="float-button float-left">
+    <button
+      mat-mini-fab color="primary"
+      aria-label="Add word"
+      (click)="addWord()"
+      matTooltip="Create your own word"
+      matTooltipPosition="right"
+      matTooltipClass="tooltip-custom">
       <mat-icon>add</mat-icon>
     </button>
   </div>
