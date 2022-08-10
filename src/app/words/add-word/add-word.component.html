@@ -8,7 +8,7 @@
     {{word}}
   </div>
 </div>
-<app-keyboard [language$]="lang.asObservable()" (keyPressed)="onKeyPressed($event)"></app-keyboard>
+<app-keyboard [language$]="lang.asObservable()" (keyPressed)="onKeyPressed($event)" (delete)="onDelete()"></app-keyboard>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="addWord()" [disabled]="disableAddWord">Add Word</button>

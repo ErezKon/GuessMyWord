@@ -48,7 +48,11 @@ export class AddWordComponent implements OnInit, OnDestroy {
     }
     this.word += key;
     this.disableAddWord = this.word.length < 3;
+  }
 
+  onDelete() {
+    this.word = this.word.substring(0, this.word.length - 1);
+    this.disableAddWord = this.word.length < 3;
   }
 
   addWord() {

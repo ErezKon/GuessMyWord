@@ -1,13 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { KeyboardProvider } from '../keyboard-provider/keyboard.provider';
+import { KeyboardCustomClass } from './keyboard-custom-class.model';
 
 @Component({
   selector: 'app-keyboard',
   templateUrl: './keyboard.component.html',
   styleUrls: ['./keyboard.component.scss']
 })
-export class KeyboardComponent implements OnInit, OnDestroy {
+export class KeyboardComponent implements OnInit, OnDestroy, DoCheck {
 
   @Input()
   public language!: string | null;
@@ -15,14 +16,21 @@ export class KeyboardComponent implements OnInit, OnDestroy {
   @Input()
   public language$!: Observable<string> | null;
 
+  @Input()
+  public customClasses!: KeyboardCustomClass | null;
+
   @Output()
   public keyPressed = new EventEmitter<string>();
+
+  @Output()
+  public delete = new EventEmitter<void>();
 
   public layout!: Array<Array<string>>;
 
   private langSub!: Subscription;
 
   constructor(private cdRef: ChangeDetectorRef) { }
+
   ngOnDestroy(): void {
     this.langSub?.unsubscribe();
   }
@@ -37,7 +45,18 @@ export class KeyboardComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  ngDoCheck(): void {
+    this.customClasses?.classPerLetter?.forEach((value, key) => {
+      document.getElementById(`keyboard-letter-${key}`)?.classList.add(value);
+    });
+  }
+
   onKeyPressed(key: string) {
     this.keyPressed.emit(key);
+  }
+
+  onDelete() {
+    this.delete.emit();
   }
 }

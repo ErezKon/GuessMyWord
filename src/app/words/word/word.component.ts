@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { KeyboardCustomClass } from 'src/app/utils/keyboard/keyboard/keyboard-custom-class.model';
 import { Word } from 'src/models/word.model';
 import { LoadingService } from 'src/services/loading.service';
 import { WordsService } from 'src/services/words.service';
@@ -31,14 +32,19 @@ export class WordComponent implements OnInit {
 
   hasWord = this.word?.id !== '-1';
 
+  usedLetters = { classPerLetter: new Map<string, string>() } as KeyboardCustomClass;
+
+  usedLetters$!: BehaviorSubject<KeyboardCustomClass>;
+
   private wordMap = new Map<string, number[]>();
 
   constructor() { }
 
   ngOnInit(): void {
+    this.usedLetters$ = new BehaviorSubject<KeyboardCustomClass>(this.usedLetters);
     for (let i = 0; i < 6; i++) {
       this.letters[i] = new Array<string>();
-      for (let j = 0; j < (this.word as Word)?.word.length; j++) {
+      for (let j = 0; j < (this.word as Word)?.word?.length; j++) {
         this.letters[i][j] = ' ';
       }
     }
@@ -49,6 +55,7 @@ export class WordComponent implements OnInit {
     this.activeJ++;
     if (this.activeJ >= (this.word as Word)?.word.length) {
       this.markBoxes();
+      this.updateUsedLetters();
       const guessedWord = this.letters[this.activeI].join('');
       if (guessedWord === this.word?.word) {
         this.solved = true;
@@ -59,6 +66,22 @@ export class WordComponent implements OnInit {
       this.activeI++;
       this.activeJ = 0;
     }
+  }
+
+  onDelete() {
+    if(this.activeJ === 0) {
+      return;
+    }
+    this.letters[this.activeI][--this.activeJ] = '';
+  }
+
+  private updateUsedLetters() {
+    for (const letter of this.letters[this.activeI]) {
+      if(!this.usedLetters.classPerLetter.has(letter) && this.word?.word.indexOf(letter) === -1) {
+        this.usedLetters.classPerLetter.set(letter, 'gray-out');
+      }
+    }
+    this.usedLetters$.next(this.usedLetters);
   }
 
   private markBoxes() {

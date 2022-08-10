@@ -38,6 +38,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       box-shadow: 0px 0px 5px 1px #f4a329;
       background-color: #ee9208
     }
+
+    &.keyboard-letter {
+      &.gray-out {
+        background-color: #aaa8a8ba;
+      }
+    }
   }
 }
 
@@ -102,8 +108,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @media(max-width: 650px) {
   .letter-boxes {
     .letter-box {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
     }
   }
 }
