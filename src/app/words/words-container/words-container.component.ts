@@ -71,7 +71,7 @@ export class WordsContainerComponent implements OnInit {
 
   onSelectionChange(event: any) {
     this.selectedLanguage = event.value;
-    this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage}));
+    this.store.dispatch(wordsActions.getLanguagesIds({language: this.selectedLanguage}));
   }
 
   onResetWordsCache() {
