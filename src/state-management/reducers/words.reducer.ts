@@ -8,7 +8,7 @@ import { Action } from "rxjs/internal/scheduler/Action";
 export const wordsreducer = createReducer(
   initialWordsState,
   on(WordsActions.getWord, (state: IWordsState) => ({ ...state, loading: state.loading + 1, word: initialWordsState.word })),
-  on(WordsActions.getRandomWord, (state: IWordsState) => ({ ...state, loading: state.loading + 1, word: initialWordsState.word })),
+  on(WordsActions.getRandomWord, (state: IWordsState) => ({ ...state, word: initialWordsState.word })),
   on(WordsActions.getWordSuccess, (state: IWordsState, {word, dec}) => ({ ...state, loading: state.loading - dec, word: word  })),
   on(WordsActions.getWordFailure, (state: IWordsState) => ({ ...state, loading: state.loading - 1 })),
 

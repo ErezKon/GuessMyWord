@@ -1,4 +1,10 @@
 export function equals<T>(array1: T[], array2: T[]): boolean {
+  if(!array1 && !array2)  {
+    return true;
+  }
+  if(!array1 || !array2) {
+    return false;
+  }
   if(array1.length !== array2.length) {
     return false;
   }

@@ -13,6 +13,7 @@ import { AddWordComponent } from '../add-word/add-word.component';
 
 import * as wordsActions from '../../../state-management/actions/words.actions';
 import { Router } from '@angular/router';
+import { equals } from 'src/app/utils/functions/array.equals';
 
 @Component({
   selector: 'app-words-container',
@@ -36,25 +37,26 @@ export class WordsContainerComponent implements OnInit {
   wordUrl$!: Observable<string>;
 
   constructor(private store: Store<IAppState>,
-    public dialog: MatDialog,
-    private wordService: WordsService,
-    private router: Router) { }
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loading$ = this.store.pipe(select(selectLoading));
     this.hasWord$ = this.store.pipe(select(selectHasWord));
-    this.store.dispatch(wordsActions.getLanguagesIds({language: this.selectedLanguage}));
+    this.store.dispatch(wordsActions.getLanguagesIds({ language: this.selectedLanguage }));
     this.subscriptions.push(this.store.pipe(select(selectLanguageIds)).subscribe(ids => {
-      this.ids = ids;
-      this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage}));
-      this.word$ = this.store.pipe(select(selectWord));
-    }));
-    this.wordUrl$ = this.word$.pipe(map(word => {
-      if(!word) {
-        return '';
+      if(ids && !equals(ids, this.ids)) {
+        this.ids = ids;
+        this.store.dispatch(wordsActions.getRandomWord({ language: this.selectedLanguage }));
+        this.word$ = this.store.pipe(select(selectWord));
+        this.wordUrl$ = this.word$.pipe(map(word => {
+          if (!word) {
+            return '';
+          }
+          return `${environment.appUrl}/word/${this.selectedLanguage}/${word.id}`;
+        }));
       }
-      return `${environment.appUrl}/word/${this.selectedLanguage}/${word.id}`;
-    }))
+    }));
+
   }
 
   addWord() {
@@ -64,19 +66,19 @@ export class WordsContainerComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.wordService.addWord(result.language, result.word);
+        this.store.dispatch(wordsActions.addWord({ language: result.language, word: result.word }));
       }
     });
   }
 
   onSelectionChange(event: any) {
     this.selectedLanguage = event.value;
-    this.store.dispatch(wordsActions.getLanguagesIds({language: this.selectedLanguage}));
+    this.store.dispatch(wordsActions.getLanguagesIds({ language: this.selectedLanguage }));
   }
 
   onResetWordsCache() {
     localStorage.setItem('ids', '[]');
-    this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage}));
+    this.store.dispatch(wordsActions.getRandomWord({ language: this.selectedLanguage }));
   }
 
 }

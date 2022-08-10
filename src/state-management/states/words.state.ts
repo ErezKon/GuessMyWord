@@ -1,5 +1,5 @@
 import { Blacklist } from "src/models/blacklist.model";
-import { Word } from "src/models/word.model";
+import { emptyWord, Word } from "src/models/word.model";
 
 export interface IWordsState {
   word: Word;
@@ -11,7 +11,7 @@ export interface IWordsState {
 }
 
 export const initialWordsState: IWordsState = {
-  word: {} as Word,
+  word: emptyWord,
   hasWord: false,
   allWords: new Array<Word>(),
   blacklists: new Map<string, Blacklist>(),

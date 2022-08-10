@@ -20,7 +20,7 @@ export const getAllWordsFailure  = createAction('[Words] Get All Words Failure')
 export const addWord = createAction('[Words] Add Word',
 props<{ language: string; word: string }>());
 export const addWordSuccess = createAction('[Words] Add Word Success',
-props<{ word: Word }>());
+props<{ docName: string }>());
 export const addWordFailure = createAction('[Words] Add Word Failure');
 
 export const getBlacklist = createAction('[Words] Get Blacklist');

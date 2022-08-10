@@ -6,7 +6,7 @@ import { BehaviorSubject, map, Observable, of, Subscription } from 'rxjs';
 import { shuffle } from 'src/app/utils/functions/array.shuffle';
 import { environment } from 'src/environments/environment';
 import { Blacklist } from 'src/models/blacklist.model';
-import { Word } from 'src/models/word.model';
+import { emptyWord, Word } from 'src/models/word.model';
 
 import { v4 as uuidv4 } from 'uuid';
 import { LoadingService } from './loading.service';
@@ -45,7 +45,7 @@ export class WordsService implements OnDestroy {
     }
   }
 
-  addWord(collectionName: string, word: string): string {
+  addWord(collectionName: string, word: string): Observable<string> {
     const id = uuidv4();
     const docName = `${collectionName}/${id}`;
     const idsDoc = `${collectionName}/ids`;
@@ -61,7 +61,7 @@ export class WordsService implements OnDestroy {
       ids: arrayUnion(id)
     });
 
-    return docName;
+    return of(docName);
   }
 
   getWord(collectionName: string, word: string, loadingIncreased: boolean = false): Observable<Word> {
@@ -88,10 +88,7 @@ export class WordsService implements OnDestroy {
     let index = 0;
     randomId = this.getRandomId(ids, usedIds);
     if (randomId === null) {
-      return of({
-        id: '-1',
-        word: ''
-      } as Word);
+      return of(emptyWord);
     }
     return this.getWord(language, randomId, true);
   }
@@ -163,9 +160,8 @@ export class WordsService implements OnDestroy {
         createdBy: doc['createdBy']
       } as Word;
     } else {
-      convertedWord = {} as Word;
+      convertedWord = emptyWord;
     }
-    console.log(convertedWord);
     return convertedWord;
   }
 }
