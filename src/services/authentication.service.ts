@@ -13,7 +13,7 @@ import { FacebookAuthProvider } from 'firebase/auth';
   providedIn: 'root'
 })
 export class AuthenticationService {
-
+/*
   constructor(public afs: AngularFirestore, // Inject Firestore service
   public afAuth: AngularFireAuth, // Inject Firebase auth service
   public router: Router,
@@ -54,7 +54,7 @@ export class AuthenticationService {
 
   /* Setting up user data when sign in with username/password,
   sign up with username/password and sign in with social auth
-  provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
+  provider in Firestore database using AngularFirestore + AngularFirestoreDocument service
   setUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
@@ -80,4 +80,5 @@ export class AuthenticationService {
       this.router.navigate(['sign-in']);
     });
   }
+  */
 }

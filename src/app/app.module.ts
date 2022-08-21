@@ -1,11 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { ShareButtonModule } from 'ngx-sharebuttons/button';
-
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ActionReducer, StoreModule } from '@ngrx/store';
@@ -21,8 +16,6 @@ import { WordContainerComponent } from './words/word-container/word-container.co
 import { KeyboardComponent } from './utils/keyboard/keyboard/keyboard.component';
 import { MaterialModule } from './material/material.module';
 import { AuthorizationComponent } from './auth/authorization/authorization.component';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { LanguageSelectorComponent } from './utils/language-selector/language-selector.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
@@ -36,6 +29,7 @@ import { WordsEffects } from 'src/state-management/effects/words.effects';
 import { ShareButtonComponent } from './utils/share-button/share-button.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { UniversalDeviceDetectorService } from 'src/services/universal-device-detector.service';
+import { ClipboardModule } from 'ngx-clipboard';
 
 
 // AoT requires an exported function for factories
@@ -71,15 +65,13 @@ export const metaReducers = environment.production ? [] : [logger];
       defaultLanguage: 'en'
     }),
     MaterialModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
+    ClipboardModule,
     BrowserAnimationsModule,
     StoreModule.forRoot(appReducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects, WordsEffects]),
   ],
   providers: [
-    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
     {
       provide: DeviceDetectorService,
       useClass: UniversalDeviceDetectorService

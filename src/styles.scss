@@ -39,6 +39,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       background-color: #ee9208
     }
 
+    &.more-letters {
+      box-shadow: 0px 0px 5px 1px #4161f1;
+      background-color: #244af1;
+      color: white;
+    }
+    &.extra-letters {
+      box-shadow: 0px 0px 5px 1px #f14141;
+      background-color: #f12424;
+      color: white;
+    }
+
     &.keyboard-letter {
       &.gray-out {
         background-color: #aaa8a8ba;

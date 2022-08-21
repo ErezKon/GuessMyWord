@@ -25,14 +25,10 @@ export class WordsEffects {
   getWord$ = createEffect(() => this.actions$.pipe(
     ofType(wordsActions.getWord),
     withLatestFrom(this.store.select(selectWordsState)),
-    mergeMap(([action, state]) => this.wordsService.getWord(action.language, action.word)
+    mergeMap(([action, state]) => this.wordsService.getWord(action.request)
       .pipe(
         map(word => {
-          let dec = 0;
-          if (word?.id !== state?.word?.id) {
-            dec = 1;
-          }
-          return wordsActions.getWordSuccess({ word: word, dec: dec });
+          return wordsActions.getWordSuccess({ word: word});
         }),
         catchError(async () => wordsActions.getWordFailure())
       ))
@@ -42,27 +38,12 @@ export class WordsEffects {
   getRandomWord$ = createEffect(() => this.actions$.pipe(
     ofType(wordsActions.getRandomWord),
     withLatestFrom(this.store.select(selectWordsState)),
-    mergeMap(([action, state]) => this.wordsService.getRandomWord(action.language, state.languageIds)
+    mergeMap(([action, state]) => this.wordsService.getRandomWord(action.language, action.length)
       .pipe(
         map(word => {
-          let dec = 0;
-          if (word !== state.word) {
-            dec = 1;
-          }
-          return wordsActions.getWordSuccess({ word: word, dec: dec });
+          return wordsActions.getWordSuccess({ word: word });
         }),
         catchError(async () => wordsActions.getWordFailure())
-      ))
-  )
-  );
-
-  getAllWords$ = createEffect(() => this.actions$.pipe(
-    ofType(wordsActions.getAllWords),
-    withLatestFrom(this.store.select(selectWordsState)),
-    mergeMap(([action, state]) => this.wordsService.getAll(action.language)
-      .pipe(
-        map(words => wordsActions.getAllWordsSuccess({ words: words })),
-        catchError(async () => wordsActions.getAllWordsFailure())
       ))
   )
   );
@@ -72,41 +53,13 @@ export class WordsEffects {
     withLatestFrom(this.store.select(selectWordsState)),
     mergeMap(([action, state]) => this.wordsService.addWord(action.language, action.word)
       .pipe(
-        map(docName => {
-          if (docName) {
-            this.router.navigateByUrl(`word/${docName}`);
+        map(word => {
+          if (word) {
+            this.router.navigateByUrl(`word/${word.language}/${word.guid}`);
           }
-          return wordsActions.addWordSuccess({ docName: docName });
+          return wordsActions.addWordSuccess({ word: word });
         }),
         catchError(async () => wordsActions.addWordFailure())
-      ))
-  )
-  );
-
-  getBlackList$ = createEffect(() => this.actions$.pipe(
-    ofType(wordsActions.getBlacklist),
-    withLatestFrom(this.store.select(selectWordsState)),
-    mergeMap(() => this.wordsService.getBlackList()
-      .pipe(
-        map(blacklist => wordsActions.getBlacklistSuccess({ blacklist: blacklist })),
-        catchError(async () => wordsActions.getBlacklistFailure())
-      ))
-  )
-  );
-
-  getLanguageids$ = createEffect(() => this.actions$.pipe(
-    ofType(wordsActions.getLanguagesIds),
-    withLatestFrom(this.store.select(selectWordsState)),
-    mergeMap(([action, state]) => this.wordsService.getLanguageIds(action.language)
-      .pipe(
-        map(ids => {
-          let dec = 0;
-          if (!equals(ids, state.languageIds)) {
-            dec = 1;
-          }
-          return wordsActions.getLanguagesIdsSuccess({ ids: ids, dec: dec });
-        }),
-        catchError(async () => wordsActions.getLanguagesIdsFailure())
       ))
   )
   );

@@ -1,11 +1,19 @@
+import { WordMetadata } from "./word-metadata.model";
+
 export interface Word {
-  id: string;
+  id: number;
+  guid: string;
   word: string;
-  createdBy: string;
+  language: string;
+  description: string;
+  solved: WordMetadata[];
 }
 
 export const emptyWord: Word = {
-  id: '-1',
+  id: -1,
+  guid: '',
   word: '',
-  createdBy: ''
+  language: '',
+  description: '',
+  solved: []
 };

@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { map, Observable, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Word } from 'src/models/word.model';
-import { WordsService } from 'src/services/words.service';
+import { GetWordReqest, WordsService } from 'src/services/words.service';
 import { selectLoading, selectHasWord, selectWord } from 'src/state-management/selectors/words.selector';
 import { IAppState } from 'src/state-management/states/app.state';
 
@@ -42,14 +42,14 @@ export class WordContainerComponent implements OnInit {
     const routeSub = this.route.params.subscribe((params: Params) => {
       if (params && params['language'] && params['id']) {
         this.language = params['language'];
-        this.store.dispatch(wordActions.getWord({ language: params['language'], word: params['id'] }))
+        this.store.dispatch(wordActions.getWord({ request: { guid: params['id'] } as GetWordReqest }))
         //this.word$ = this.wordsService.getWord(params['language'], params['id']);
         this.word$ = this.store.pipe(select(selectWord));
         this.wordUrl$ = this.word$.pipe(map(word => {
           if (!word) {
             return '';
           }
-          return `${environment.appUrl}/word/${this.language}/${word.id}`;
+          return `${environment.appUrl}/word/${this.language}/${word.guid}`;
         }));
         this.hasWord$ = this.store.pipe(select(selectHasWord));
       }

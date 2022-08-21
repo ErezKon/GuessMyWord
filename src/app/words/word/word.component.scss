@@ -31,6 +31,24 @@
   font-weight: bold;
 }
 
+.solved-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.failed {
+  div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 @media(max-width: 650px) {
   .word-boxes {
     .word-box {

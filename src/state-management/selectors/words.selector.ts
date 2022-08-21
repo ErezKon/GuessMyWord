@@ -9,27 +9,12 @@ export const selectWord = createSelector(
   (state: IWordsState) => state.word
 );
 
-export const selectAllWords = createSelector(
-  selectWordsState,
-  (state: IWordsState) => state.allWords
-);
-
-export const selectBlacklist = createSelector(
-  selectWordsState,
-  (state: IWordsState) => state.blacklists
-);
-
-export const selectLanguageIds = createSelector(
-  selectWordsState,
-  (state: IWordsState) => state.languageIds
-);
-
 export const selectLoading = createSelector(
   selectWordsState,
-  (state: IWordsState) => state.loading > 0
+  (state: IWordsState) => state.wordLoading
 );
 
 export const selectHasWord = createSelector(
   selectWordsState,
-  (state: IWordsState) => state.word?.id !== '-1'
+  (state: IWordsState) => state.word?.id !== -1
 );

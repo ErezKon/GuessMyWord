@@ -35,6 +35,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "firebase": "^9.9.1",
     "ngrx-store-logger": "0.2.4",
+    "ngx-clipboard": "15.1.0",
     "ngx-device-detector": "4.0.0",
     "ngx-sharebuttons": "11.0.0",
     "rxjs": "~7.5.0",

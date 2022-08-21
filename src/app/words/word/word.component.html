@@ -1,12 +1,27 @@
   <div class="random-word" *ngIf="hasWord">
     <div *ngFor="let _ of [].constructor(6); let i=index" class="letter-boxes" [ngClass]="{'rtl': language === 'hebrew'}">
-      <div id="letter-box-{{i}}-{{j}}" *ngFor="let _ of [].constructor(word?.word?.length ?? 0); let j=index"
-        class="letter-box" [ngClass]="{'active-box': activeI === i && activeJ === j}" (click)="onLetterClick(i,j)">
+      <div id="letter-box-{{i}}-{{j}}"
+        *ngFor="let _ of [].constructor(word?.word?.length ?? 0); let j=index"
+        class="letter-box"
+        [ngClass]="{'active-box': activeI === i && activeJ === j}"
+        [matTooltip]="tooltips[i][j]"
+        [matTooltipClass]="'tooltip-custom'"
+        (click)="onLetterClick(i,j)">
         {{letters[i][j]}}
       </div>
     </div>
-    <app-keyboard *ngIf="!solved" [language]="language" [customClasses]="usedLetters$ | async" (keyPressed)="onKeyPressed($event)" (delete)="onDelete()"></app-keyboard>
-    <div *ngIf="solved" class="solved">
-      Solved the word in {{activeI + 1}} tries
+    <app-keyboard *ngIf="!solved && !failed" [language]="language" [customClasses]="usedLetters$ | async" (keyPressed)="onKeyPressed($event)" (delete)="onDelete()"></app-keyboard>
+    <div *ngIf="solved">
+      <div class="solved">
+        Solved the word in {{activeI + 1}} tries
+      </div>
+      <div class="solved-button">
+        <button mat-raised-button color="primary" (click)="onPlayAnotherWord()">Play another word</button>
+      </div>
+    </div>
+    <div *ngIf="failed" class="failed">
+      <div>Failed to solve the word! </div>
+      <div>The word was {{word?.word}}</div>
+      <div><button mat-raised-button color="primary" (click)="onPlayAnotherWord()">Try another word</button></div>
     </div>
   </div>

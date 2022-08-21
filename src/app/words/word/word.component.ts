@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { KeyboardCustomClass } from 'src/app/utils/keyboard/keyboard/keyboard-custom-class.model';
+import { environment } from 'src/environments/environment';
 import { Word } from 'src/models/word.model';
 import { LoadingService } from 'src/services/loading.service';
 import { WordsService } from 'src/services/words.service';
@@ -20,7 +21,7 @@ export class WordComponent implements OnInit {
   public language!: string;
 
   @Output()
-  public resetWordsCache = new EventEmitter<void>();
+  public playAnotherWord = new EventEmitter<void>();
 
   activeI: number = 0;
 
@@ -28,24 +29,32 @@ export class WordComponent implements OnInit {
 
   solved: boolean = false;
 
+  failed: boolean = false;
+
   letters = new Array<Array<string>>();
 
-  hasWord = this.word?.id !== '-1';
+  hasWord = this.word?.id !== -1;
 
   usedLetters = { classPerLetter: new Map<string, string>() } as KeyboardCustomClass;
 
   usedLetters$!: BehaviorSubject<KeyboardCustomClass>;
 
+  tooltips = new Array<Array<string>>();
+
   private wordMap = new Map<string, number[]>();
 
-  constructor() { }
+  private wordMapped = false;
+
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.usedLetters$ = new BehaviorSubject<KeyboardCustomClass>(this.usedLetters);
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < environment.guessTries; i++) {
       this.letters[i] = new Array<string>();
+      this.tooltips[i] = new Array<string>();
       for (let j = 0; j < (this.word as Word)?.word?.length; j++) {
         this.letters[i][j] = ' ';
+        this.tooltips[i][j] = ' ';
       }
     }
   }
@@ -65,7 +74,15 @@ export class WordComponent implements OnInit {
       }
       this.activeI++;
       this.activeJ = 0;
+      if(this.activeI >= environment.guessTries) {
+        this.failed = true;
+        return;
+      }
     }
+  }
+
+  onPlayAnotherWord() {
+    this.playAnotherWord.emit();
   }
 
   onDelete() {
@@ -84,24 +101,62 @@ export class WordComponent implements OnInit {
     this.usedLetters$.next(this.usedLetters);
   }
 
+  private updateInnerMap(map: Map<string, number[]>, letters: string[]) {
+    let i = 0;
+    for (const letter of letters) {
+      if(map.has(letter)){
+        map.get(letter)?.push(i++);
+      } else {
+        map.set(letter, [i++]);
+      }
+    }
+  }
+
   private markBoxes() {
     this.mapWord();
+    const innerMap = new Map<string, number[]>();
+    this.updateInnerMap(innerMap, this.letters[this.activeI]);
     for (let i = 0; i < (this.word as Word).word.length; i++) {
       const letter = this.letters[this.activeI][i];
       const box = document.getElementById(`letter-box-${this.activeI}-${i}`);
       if(this.wordMap.has(letter)) {
         const indexes = this.wordMap.get(letter) as number[];
-        if(indexes.indexOf(i) === -1) {
-          box?.classList.add('wrong-location');
-        } else {
+        if(indexes.indexOf(i) !== -1) {
           box?.classList.add('correct-letter');
+          this.tooltips[this.activeI][i] = 'The letter is in the correct location';
+        }
+        const letterCount = this.letters[this.activeI].filter(l => l === letter).length;
+        if(indexes.length > letterCount){
+          for (const index of innerMap.get(letter) as number[]) {
+            const anotherBox = document.getElementById(`letter-box-${this.activeI}-${index}`);
+            if(anotherBox?.classList.contains('wrong-location')){
+              continue;
+            }
+            anotherBox?.classList.add('more-letters');
+            this.tooltips[this.activeI][i] = 'The letter is in the correct location, but there are more locations.';
+          }
+        } else if(indexes.length < letterCount){
+          for (const index of innerMap.get(letter) as number[]) {
+            const anotherBox = document.getElementById(`letter-box-${this.activeI}-${index}`);
+            if(anotherBox?.classList.contains('wrong-location')){
+              continue;
+            }
+            anotherBox?.classList.add('extra-letters');
+            this.tooltips[this.activeI][i] = 'extra-letters';
+          }
+        }
+        if(indexes.indexOf(i) === -1) {
+          box?.classList.remove('extra-letters');
+          box?.classList.remove('more-letters');
+          box?.classList.add('wrong-location');
+          this.tooltips[this.activeI][i] = 'The letter is in the wrong location.';
         }
       }
     }
   }
 
   private mapWord() {
-    if(!this.word) {
+    if(!this.word || this.wordMapped) {
       return;
     }
     for (let i = 0; i < (this.word as Word).word.length; i++) {
@@ -113,16 +168,13 @@ export class WordComponent implements OnInit {
         this.wordMap.set(char, [i]);
       }
     }
+    this.wordMapped = true;
   }
 
   onLetterClick(i: number, j: number) {
     if (this.activeI === i) {
       this.activeJ = j;
     }
-  }
-
-  onResetWordsCache() {
-    this.resetWordsCache.emit();
   }
 
 }

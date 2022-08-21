@@ -31,9 +31,7 @@ export class AddWordComponent implements OnInit, OnDestroy {
   constructor(public dialogRef: MatDialogRef<AddWordComponent>, private wordService: WordsService) { }
 
   ngOnInit(): void {
-    this.subscriptions.push(this.wordService.getBlackList().subscribe(blacklist => {
-      this.blacklist = blacklist;
-    }));
+
   }
 
   ngOnDestroy(): void {

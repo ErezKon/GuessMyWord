@@ -1,6 +1,7 @@
 import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClipboardService } from 'ngx-clipboard';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable } from 'rxjs';
 
@@ -12,10 +13,13 @@ import { Observable } from 'rxjs';
 export class ShareButtonComponent implements OnInit {
 
   @Input()
-  public icon!: 'facebook' | 'whatsapp';
+  public icon!: 'facebook' | 'whatsapp' | 'link' | 'twitter';
 
   @Input()
   public url$!: Observable<string>;
+
+  @Input()
+  public tooltip!: string;
 
   @ViewChild('shareLink')
   shareLink!: ElementRef;
@@ -27,7 +31,9 @@ export class ShareButtonComponent implements OnInit {
   shareUrl!: string;
 
 
-  constructor(private deviceService: DeviceDetectorService, private router: Router) {
+  constructor(private deviceService: DeviceDetectorService,
+    private router: Router,
+    private clipboardApi: ClipboardService) {
     this.isDesktop = this.deviceService.isDesktop();
 
   }
@@ -39,7 +45,10 @@ export class ShareButtonComponent implements OnInit {
         this.shareUrl = urlEncoder.encodeKey(`https://www.facebook.com/sharer/sharer.php?u=${this.url}`);
         break;
       case 'whatsapp':
-        this.shareUrl = urlEncoder.encodeKey(`https://wa.me?text=${this.url}`);
+        this.shareUrl = urlEncoder.encodeKey(`https://wa.me?text=I Solved this word in 3 tries! Think you can beat me?\n${this.url}`);
+        break;
+      case 'twitter':
+        this.shareUrl = urlEncoder.encodeKey(`http://twitter.com/share?text=I Solved this word in 3 tries! Think you can beat me\n${this.url}\n#milala #guessmyword`);
         break;
 
       default:
@@ -56,6 +65,10 @@ export class ShareButtonComponent implements OnInit {
 
 
   onShare() {
-    this.shareLink.nativeElement.click();
+    if(this.icon === 'link') {
+      this.clipboardApi.copyFromContent(this.url)
+    } else {
+      this.shareLink.nativeElement.click();
+    }
   }
 }

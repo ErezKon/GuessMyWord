@@ -5,7 +5,7 @@
   </div>
   <div class="words" *ngIf="!(loading$ | async); else loading;">
     <app-word *ngIf="(hasWord$ | async); else noWord;" [word]="word$ | async" [language]="selectedLanguage"
-      (resetWordsCache)="onResetWordsCache()"></app-word>
+      (playAnotherWord)="onPlayAnotherWord()"></app-word>
   </div>
   <div class="float-button float-right" *ngIf="(hasWord$ | async)">
     <button
@@ -19,10 +19,16 @@
     </button>
     <mat-menu #menu="matMenu" class="share-button" [panelClass]="'test-panel-class'" [backdropClass]="'test-overlay-class'">
       <div mat-menu-item class="icon-share-menu">
-        <app-share-button  [icon]="'facebook'" [url$]="wordUrl$"></app-share-button>
+        <app-share-button  [icon]="'facebook'" [tooltip]="'Share in Facebook'" [url$]="wordUrl$"></app-share-button>
       </div>
       <div mat-menu-item class="icon-share-menu">
-        <app-share-button  [icon]="'whatsapp'" [url$]="wordUrl$"></app-share-button>
+        <app-share-button  [icon]="'twitter'" [tooltip]="'Share in Twitter'" [url$]="wordUrl$"></app-share-button>
+      </div>
+      <div mat-menu-item class="icon-share-menu">
+        <app-share-button  [icon]="'whatsapp'" [tooltip]="'Share in WhatsApp'" [url$]="wordUrl$"></app-share-button>
+      </div>
+      <div mat-menu-item class="icon-share-menu">
+        <app-share-button  [icon]="'link'" [tooltip]="'Copy link'" [url$]="wordUrl$"></app-share-button>
       </div>
     </mat-menu>
   </div>
@@ -48,12 +54,6 @@
     <div class="no-words" *ngIf="!(loading$ | async)">
       <div class="message">
         No words found, or you solved all the words.
-      </div>
-      <div class="reset">
-        If you wish you can reset the words memory and replay.
-      </div>
-      <div class="reset-button">
-        <button mat-raised-button color="primary"(click)="onResetWordsCache()">Reset</button>
       </div>
     </div>
   </ng-template>
