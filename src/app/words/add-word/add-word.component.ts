@@ -3,7 +3,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Blacklist } from 'src/models/blacklist.model';
-import { WordsService } from 'src/services/words.service';
 
 @Component({
   selector: 'app-add-word',
@@ -28,7 +27,7 @@ export class AddWordComponent implements OnInit, OnDestroy {
 
   private blacklist!: Map<string, Blacklist>;
 
-  constructor(public dialogRef: MatDialogRef<AddWordComponent>, private wordService: WordsService) { }
+  constructor(public dialogRef: MatDialogRef<AddWordComponent>) { }
 
   ngOnInit(): void {
 

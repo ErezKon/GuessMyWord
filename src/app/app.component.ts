@@ -3,8 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { L10nTranslationService } from 'angular-l10n';
-import { hebWords } from 'src/assets/heb_words';
-import { websterDic } from 'src/assets/WebsterKeys';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { WordsService } from 'src/services/words.service';
@@ -22,11 +20,9 @@ export class AppComponent {
 
   selectedLanguage = environment.defaultLanguage;
 
-  constructor(private wordsService: WordsService,
-    public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private authService: AuthenticationService,
     private translation: L10nTranslationService) {
       if(!this.translation.getLocale()) {
         this.translation.setLocale(heLocale);
@@ -59,14 +55,6 @@ export class AppComponent {
         `en`,
         this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/us-uk.svg')
       );
-
-      // const words = hebWords;
-      // let i = 0;
-      // for (const word of words) {
-      //    this.wordsService.addWord('hebrew', word);
-      //   i++;
-      //   console.log(`added word ${i}/${words.length} => ${(i * 100) / words.length}%.`);
-      // }
   }
 
   onLanguageChanged(language: string) {

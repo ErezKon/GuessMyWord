@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { map, Observable, of, Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Word } from 'src/models/word.model';
 import { selectLoading, selectWord, selectHasWord } from 'src/state-management/selectors/words.selector';
@@ -36,7 +36,6 @@ export class WordsContainerComponent implements OnInit {
   wordUrl$!: Observable<string>;
 
   constructor(private store: Store<IAppState>,
-    private router: Router,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {

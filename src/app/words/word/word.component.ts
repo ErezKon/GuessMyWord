@@ -1,12 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { L10nTranslationService } from 'angular-l10n';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { KeyboardCustomClass } from 'src/app/utils/keyboard/keyboard/keyboard-custom-class.model';
 import { environment } from 'src/environments/environment';
 import { Word } from 'src/models/word.model';
-import { LoadingService } from 'src/services/loading.service';
-import { WordsService } from 'src/services/words.service';
 
 @Component({
   selector: 'app-word',

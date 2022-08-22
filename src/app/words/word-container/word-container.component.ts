@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -28,8 +28,7 @@ export class WordContainerComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private store: Store<IAppState>,
-    public dialog: MatDialog,
-    private wordsService: WordsService) { }
+    public dialog: MatDialog) { }
 
   ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
@@ -43,7 +42,6 @@ export class WordContainerComponent implements OnInit {
       if (params && params['language'] && params['id']) {
         this.language = params['language'];
         this.store.dispatch(wordActions.getWord({ request: { guid: params['id'] } as GetWordReqest }))
-        //this.word$ = this.wordsService.getWord(params['language'], params['id']);
         this.word$ = this.store.pipe(select(selectWord));
         this.wordUrl$ = this.word$.pipe(map(word => {
           if (!word) {
@@ -56,7 +54,6 @@ export class WordContainerComponent implements OnInit {
     });
 
     this.subscriptions.push(routeSub);
-    //this.word$ = this.store.pipe(select(selectWord));
 
   }
 
@@ -68,7 +65,6 @@ export class WordContainerComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.store.dispatch(wordActions.addWord({ language: result.language, word: result.word }))
-        //this.wordService.addWord(result.language, result.word);
       }
     });
   }
