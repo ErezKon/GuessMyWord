@@ -1,0 +1,20 @@
+{
+  "SELECT_LANGUAGE": "בחר שפה",
+  "SOCIAL_SHARE": "שתף את המילה ברשתות חברתיות",
+  "SHARE_FACEBOOK": "שתף עם פייסבוק",
+  "SHARE_WHATSAPP": "שתף עם וואטסאפ",
+  "SHARE_TWITTER": "שתף עם טוויטר",
+  "COPY_LINK": "העתק קישור",
+  "CREATE_WORD": "צור מילה משלך",
+  "NO_WORDS": "לא נמצאו מילים, או שפתרת את כולן.",
+  "SOLVED": "פתרת ב{{ tries }} ניסיונות!",
+  "FAILED": "😢 לא הצלחת לגלות את המילה",
+  "SOLUTION": "המילה הייתה {{ word }}",
+  "CORRECT_LOCATION": "האות במיקום הנכון!",
+  "WRONG_LOCATION": "האות במיקום לא נכון.",
+  "EXTRA_LETTERS": "יש עודף אותיות.",
+  "MORE_LETTERS": "האות במיקום הנכון אך ישנן עוד מופעים.",
+  "FORBIDDEN": "האות לא תקינה. אנא בחר אות חדשה.",
+  "ADD_WORD": "הוסף מילה",
+  "ADD_WORD_TITLE": "הוסף מילה חדשה"
+}

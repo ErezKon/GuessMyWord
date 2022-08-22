@@ -1,5 +1,5 @@
 <div class="dialog-tool">
-  <span class="dialog-title">Add New Word</span>
+  <span class="dialog-title">{{ 'ADD_NEW_WORD' | translateAsync }}</span>
 </div>
 <mat-dialog-content>
 <app-language-selector [(value)]="selectedLanguage" (selectionChange)="onSelectionChange($event)"></app-language-selector>
@@ -11,8 +11,8 @@
 <app-keyboard [language$]="lang.asObservable()" (keyPressed)="onKeyPressed($event)" (delete)="onDelete()"></app-keyboard>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="addWord()" [disabled]="disableAddWord">Add Word</button>
+  <button mat-raised-button color="primary" (click)="addWord()" [disabled]="disableAddWord">{{ 'ADD_WORD' | translateAsync }}</button>
   <div class="forbidden-word" *ngIf="forbidden">
-    The selected word is forbidden. Please choose a new word.
+    {{ 'FORBIDDEN' | translateAsync }}
   </div>
 </mat-dialog-actions>

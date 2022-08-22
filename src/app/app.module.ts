@@ -30,6 +30,9 @@ import { ShareButtonComponent } from './utils/share-button/share-button.componen
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { UniversalDeviceDetectorService } from 'src/services/universal-device-detector.service';
 import { ClipboardModule } from 'ngx-clipboard';
+import { L10nTranslationModule, L10nIntlModule, L10nRoutingModule } from 'angular-l10n';
+import { l10nConfig } from './i10n.config';
+import { ShareButtonsComponent } from './utils/share-buttons/share-buttons.component';
 
 
 // AoT requires an exported function for factories
@@ -55,15 +58,16 @@ export const metaReducers = environment.production ? [] : [logger];
     KeyboardComponent,
     AuthorizationComponent,
     LanguageSelectorComponent,
-    ShareButtonComponent
+    ShareButtonComponent,
+    ShareButtonsComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    TranslateModule.forRoot({
-      defaultLanguage: 'en'
-    }),
+    L10nTranslationModule.forRoot(l10nConfig),
+    L10nIntlModule,
+    L10nRoutingModule.forRoot(),
     MaterialModule,
     ClipboardModule,
     BrowserAnimationsModule,
@@ -75,7 +79,8 @@ export const metaReducers = environment.production ? [] : [logger];
     {
       provide: DeviceDetectorService,
       useClass: UniversalDeviceDetectorService
-    }],
+    },
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

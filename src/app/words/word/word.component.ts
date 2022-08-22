@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { L10nTranslationService } from 'angular-l10n';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { KeyboardCustomClass } from 'src/app/utils/keyboard/keyboard/keyboard-custom-class.model';
 import { environment } from 'src/environments/environment';
@@ -45,7 +46,8 @@ export class WordComponent implements OnInit {
 
   private wordMapped = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+    private translation: L10nTranslationService) { }
 
   ngOnInit(): void {
     this.usedLetters$ = new BehaviorSubject<KeyboardCustomClass>(this.usedLetters);
@@ -123,7 +125,7 @@ export class WordComponent implements OnInit {
         const indexes = this.wordMap.get(letter) as number[];
         if(indexes.indexOf(i) !== -1) {
           box?.classList.add('correct-letter');
-          this.tooltips[this.activeI][i] = 'The letter is in the correct location';
+          this.tooltips[this.activeI][i] = this.translation.translate('CORRECT_LOCATION');
         }
         const letterCount = this.letters[this.activeI].filter(l => l === letter).length;
         if(indexes.length > letterCount){
@@ -133,7 +135,7 @@ export class WordComponent implements OnInit {
               continue;
             }
             anotherBox?.classList.add('more-letters');
-            this.tooltips[this.activeI][i] = 'The letter is in the correct location, but there are more locations.';
+            this.tooltips[this.activeI][i] = this.translation.translate('MORE_LETTERS');
           }
         } else if(indexes.length < letterCount){
           for (const index of innerMap.get(letter) as number[]) {
@@ -142,14 +144,14 @@ export class WordComponent implements OnInit {
               continue;
             }
             anotherBox?.classList.add('extra-letters');
-            this.tooltips[this.activeI][i] = 'extra-letters';
+            this.tooltips[this.activeI][i] = this.translation.translate('EXTRA_LETTERS');
           }
         }
         if(indexes.indexOf(i) === -1) {
           box?.classList.remove('extra-letters');
           box?.classList.remove('more-letters');
           box?.classList.add('wrong-location');
-          this.tooltips[this.activeI][i] = 'The letter is in the wrong location.';
+          this.tooltips[this.activeI][i] = this.translation.translate('WRONG_LOCATION');;
         }
       }
     }

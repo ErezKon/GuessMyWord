@@ -2,7 +2,33 @@
 @import '../node_modules/ngx-sharebuttons/themes/default.scss';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+
+  &.rtl {
+    direction: rtl;
+
+    .mat-form-field-label-wrapper {
+      // .mat-form-field-label{
+      //   display: flex;
+      //   flex-direction: row;
+      //   justify-content: flex-start;
+      // }
+      text-align: right;
+    }
+
+  }
+}
+
+.mat-select-value {
+  text-align: center;
+}
+
+.mat-toolbar {
+  direction: ltr !important;
+}
 
 .letter-boxes {
   display: flex;
@@ -113,6 +139,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     min-width: unset;
     max-width: unset;
     margin-bottom: 10px;
+  }
+}
+
+.random-word {
+  &.english {
+    direction: ltr !important;
+  }
+  &.hebrew {
+    direction: rtl !important;
   }
 }
 

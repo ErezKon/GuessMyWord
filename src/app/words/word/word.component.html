@@ -1,4 +1,4 @@
-  <div class="random-word" *ngIf="hasWord">
+  <div class="random-word {{language}}" *ngIf="hasWord">
     <div *ngFor="let _ of [].constructor(6); let i=index" class="letter-boxes" [ngClass]="{'rtl': language === 'hebrew'}">
       <div id="letter-box-{{i}}-{{j}}"
         *ngFor="let _ of [].constructor(word?.word?.length ?? 0); let j=index"
@@ -13,15 +13,16 @@
     <app-keyboard *ngIf="!solved && !failed" [language]="language" [customClasses]="usedLetters$ | async" (keyPressed)="onKeyPressed($event)" (delete)="onDelete()"></app-keyboard>
     <div *ngIf="solved">
       <div class="solved">
-        Solved the word in {{activeI + 1}} tries
+        <!-- Solved the word in {{activeI + 1}} tries -->
+        {{'SOLVED' | translateAsync:{ tries: activeI + 1 } }}
       </div>
       <div class="solved-button">
         <button mat-raised-button color="primary" (click)="onPlayAnotherWord()">Play another word</button>
       </div>
     </div>
     <div *ngIf="failed" class="failed">
-      <div>Failed to solve the word! </div>
-      <div>The word was {{word?.word}}</div>
+      <div> {{'FAILED' | translateAsync}} </div>
+      <div> {{ 'SOLUTION' | translateAsync:{ word: word?.word } }}</div>
       <div><button mat-raised-button color="primary" (click)="onPlayAnotherWord()">Try another word</button></div>
     </div>
   </div>

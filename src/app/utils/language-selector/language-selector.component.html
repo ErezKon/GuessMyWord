@@ -1,6 +1,6 @@
 <div class="select-language">
   <mat-form-field appearance="fill">
-    <mat-label>Select Language</mat-label>
+    <mat-label>{{'SELECT_LANGUAGE' | translateAsync }}</mat-label>
     <mat-select [(value)]="value" (selectionChange)="onSelectionChange($event)">
       <mat-option *ngFor="let lang of languages" [value]="lang.value">
         {{lang.display}}

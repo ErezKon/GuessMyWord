@@ -1,0 +1,20 @@
+{
+  "SELECT_LANGUAGE": "Select language",
+  "SOCIAL_SHARE": "Share word on social media",
+  "SHARE_FACEBOOK": "Share with Facebook",
+  "SHARE_WHATSAPP": "Share with WhatsApp",
+  "SHARE_TWITTER": "Share with twitter",
+  "COPY_LINK": "Copy link",
+  "CREATE_WORD": "Create your own word",
+  "NO_WORDS": "No words found, or you solved all the words.",
+  "SOLVED": "Solved in {{ tries }} tries!",
+  "FAILED": "Failed to solve the word 😢",
+  "SOLUTION": "The word was {{ word }}",
+  "CORRECT_LOCATION": "The letter is in the correct location!",
+  "WRONG_LOCATION": "The letter is in the wrong location.",
+  "EXTRA_LETTERS": "There are extra letters than needed.",
+  "MORE_LETTERS": "The letter is in the correct location, but there are more locations.",
+  "FORBIDDEN": "The selected word is forbidden. Please choose a new word.",
+  "ADD_WORD": "Add word",
+  "ADD_WORD_TITLE": "Add new word"
+}

@@ -46,7 +46,7 @@ export class WordsService implements OnDestroy {
   }
 
   getWord(request: GetWordReqest): Observable<Word> {
-    //return this.demoWord$;
+    return this.demoWord$;
     if (!request.id && !request.guid) {
       return of({} as Word);
     }
@@ -61,7 +61,7 @@ export class WordsService implements OnDestroy {
   }
 
   getRandomWord(language: string, length?: number): Observable<Word> {
-    //return this.demoWord$;
+    return this.demoWord$;
    let url = `${this.baseUrl}/api/Words/GetRandomWord?language=${language}`;
    if(length) {
     url = `${url}&length=${length}`;

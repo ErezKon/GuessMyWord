@@ -13,7 +13,23 @@ const routes: Routes = [
     component: WordsContainerComponent
   },
   {
+    path: 'he-IL/words',
+    component: WordsContainerComponent
+  },
+  {
+    path: 'en-US/words',
+    component: WordsContainerComponent
+  },
+  {
     path: 'word/:language/:id',
+    component: WordContainerComponent
+  },
+  {
+    path: 'he-IL/word/:language/:id',
+    component: WordContainerComponent
+  },
+  {
+    path: 'en-US/word/:language/:id',
     component: WordContainerComponent
   },
   {
