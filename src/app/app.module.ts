@@ -1,5 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +34,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { L10nTranslationModule, L10nIntlModule, L10nRoutingModule } from 'angular-l10n';
 import { l10nConfig } from './i10n.config';
 import { ShareButtonsComponent } from './utils/share-buttons/share-buttons.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 
 // AoT requires an exported function for factories
@@ -64,9 +67,11 @@ export const metaReducers = environment.production ? [] : [logger];
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     L10nTranslationModule.forRoot(l10nConfig),
     L10nIntlModule,
-    L10nRoutingModule.forRoot(),
+    //L10nRoutingModule.forRoot(),
     MaterialModule,
     ClipboardModule,
     BrowserAnimationsModule,
@@ -75,6 +80,10 @@ export const metaReducers = environment.production ? [] : [logger];
     EffectsModule.forRoot([AppEffects, WordsEffects]),
   ],
   providers: [
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
     {
       provide: DeviceDetectorService,
       useClass: UniversalDeviceDetectorService

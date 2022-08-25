@@ -1,10 +1,10 @@
 <mat-toolbar color="primary">
   <span>Guess My Word</span>
   <span class="spacer"></span>
-  <button mat-icon-button aria-label="Switch to english" matTooltip="English" *ngIf="selectedLanguage.value === 'hebrew'" (click)="onLanguageChanged('english')">
+  <button mat-icon-button aria-label="Switch to english" matTooltip="English" [matTooltipClass]="'tooltip-custom'" *ngIf="selectedLanguage.value === 'hebrew'" (click)="onLanguageChanged('english')">
     <mat-icon svgIcon="en" aria-hidden="false" aria-label="Switch to english icon"></mat-icon>
   </button>
-  <button mat-icon-button aria-label="Switch to hebrew" matTooltip="Hebrew" *ngIf="selectedLanguage.value === 'english'" (click)="onLanguageChanged('hebrew')">
+  <button mat-icon-button aria-label="Switch to hebrew" matTooltip="Hebrew" [matTooltipClass]="'tooltip-custom'" *ngIf="selectedLanguage.value === 'english'" (click)="onLanguageChanged('hebrew')">
     <mat-icon svgIcon="il" aria-hidden="false" aria-label="Switch to hebrew icon"></mat-icon>
   </button>
   <!-- <button mat-icon-button class="icon" aria-label="Example icon-button with share icon" (click)="onLogin()">

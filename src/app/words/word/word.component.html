@@ -1,13 +1,15 @@
   <div class="random-word {{language}}" *ngIf="hasWord">
-    <div *ngFor="let _ of [].constructor(6); let i=index" class="letter-boxes" [ngClass]="{'rtl': language === 'hebrew'}">
-      <div id="letter-box-{{i}}-{{j}}"
-        *ngFor="let _ of [].constructor(word?.word?.length ?? 0); let j=index"
-        class="letter-box"
-        [ngClass]="{'active-box': activeI === i && activeJ === j}"
-        [matTooltip]="tooltips[i][j]"
-        [matTooltipClass]="'tooltip-custom'"
-        (click)="onLetterClick(i,j)">
-        {{letters[i][j]}}
+    <div class="word-letter-rows">
+      <div *ngFor="let _ of [].constructor(6); let i=index" class="letter-boxes" [ngClass]="{'rtl': language === 'hebrew'}">
+        <div id="letter-box-{{i}}-{{j}}"
+          *ngFor="let _ of [].constructor(word?.word?.length ?? 0); let j=index"
+          class="letter-box"
+          [ngClass]="{'active-box': activeI === i && activeJ === j}"
+          [matTooltip]="tooltips[i][j]"
+          [matTooltipClass]="'tooltip-custom'"
+          (click)="onLetterClick(i,j)">
+          {{letters[i][j]}}
+        </div>
       </div>
     </div>
     <app-keyboard *ngIf="!solved && !failed" [language]="language" [customClasses]="usedLetters$ | async" (keyPressed)="onKeyPressed($event)" (delete)="onDelete()"></app-keyboard>

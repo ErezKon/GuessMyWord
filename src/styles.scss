@@ -19,6 +19,10 @@ body {
       text-align: right;
     }
 
+    .mat-form-field {
+      text-align: right;
+    }
+
   }
 }
 
@@ -116,6 +120,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 60vh;
 }
 
 .tooltip-custom {
@@ -144,11 +149,19 @@ body {
 
 .random-word {
   &.english {
-    direction: ltr !important;
+    .word-letter-rows{
+      direction: ltr !important;
+    }
   }
   &.hebrew {
-    direction: rtl !important;
+    .word-letter-rows{
+      direction: rtl !important;
+    }
   }
+}
+
+.length-selector-toggle {
+  direction: ltr !important;
 }
 
 @media(max-width: 650px) {

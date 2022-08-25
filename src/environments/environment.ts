@@ -5,23 +5,25 @@
 export const environment = {
   production: false,
   appUrl: 'http://213.57.171.199:30120',
-  serverUrl: 'http://localhost:5123',
+  serverUrl: 'http://localhost:5123', //'https://guessmyword.azurewebsites.net',
   guessTries: 6,
   languages: [
     {
       value: 'hebrew',
       display: 'עברית'
-     },
-     {
+    },
+    {
       value: 'english',
       display: 'English'
-     }
-    ],
+    }
+  ],
   defaultLanguage: {
-    value: 'english',
-    display: 'English'
-   },
-   defaultRandomLength: 5,
+    value: 'hebrew',
+    display: 'עברית'
+  },
+  minLength: 3,
+  maxLength: 9,
+  defaultRandomLength: 5,
 };
 
 /*

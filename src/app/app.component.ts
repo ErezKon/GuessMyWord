@@ -24,9 +24,10 @@ export class AppComponent {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private translation: L10nTranslationService) {
-      if(!this.translation.getLocale()) {
-        this.translation.setLocale(heLocale);
-      }
+      //if(!this.translation.getLocale()) {
+      this.translation.setLocale(heLocale);
+      document.body.classList.add('rtl');
+      //}
       this.matIconRegistry.addSvgIcon(
         `google`,
         this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/google-96.svg')

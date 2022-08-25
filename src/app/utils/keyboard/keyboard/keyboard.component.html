@@ -1,6 +1,9 @@
-<div *ngFor="let row of layout; let i=index;" class="letter-boxes">
-  <div *ngFor="let letter of row; let j=index;" class="letter-box keyboard-letter" (click)="onKeyPressed(letter)" id="keyboard-letter-{{letter}}">{{letter}}</div>
-  <div *ngIf="i === 0"  class="letter-box delete" (click)="onDelete()">
-    Delete
+<div class="keyboard {{language}}">
+  <div *ngFor="let row of layout; let i=index;" class="letter-boxes">
+    <div *ngFor="let letter of row; let j=index;" class="letter-box keyboard-letter" (click)="onKeyPressed(letter)" id="keyboard-letter-{{letter}}">{{letter}}</div>
+    <div *ngIf="i === 0"  class="letter-box delete" (click)="onDelete()">
+      Delete
+    </div>
   </div>
 </div>
+

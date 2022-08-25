@@ -21,6 +21,7 @@
   }
 }
 
+
 .solved {
   display: flex;
   justify-content: center;
@@ -57,3 +58,14 @@
     }
   }
 }
+
+
+@media(max-height: 800px) {
+  .word-letter-rows {
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-bottom: 10px;
+  }
+}
+
+
