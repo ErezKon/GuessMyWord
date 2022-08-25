@@ -1,10 +1,12 @@
 <div class="word-container">
   <div class="word" *ngIf="!(loading$ | async); else loading;">
-    <app-word [word]="(word$ | async)" [language]="language"></app-word>
+    <app-word [word]="(word$ | async)"
+      [language]="language"
+      (solvedInTries)="onSolved($event)"></app-word>
   </div>
   <div class="float-button float-right" *ngIf="(hasWord$ | async)">
 
-    <app-share-buttons [wordUrl$]="wordUrl$"></app-share-buttons>
+    <app-share-buttons [wordUrl$]="wordUrl$" [tries$]="tries$"></app-share-buttons>
   </div>
   <div class="float-button float-left">
     <button

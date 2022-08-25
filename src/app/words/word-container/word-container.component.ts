@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { map, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Word } from 'src/models/word.model';
 import { GetWordReqest, WordsService } from 'src/services/words.service';
@@ -26,6 +26,10 @@ export class WordContainerComponent implements OnInit {
   language!: string;
   private subscriptions = new Array<Subscription>();
 
+  private triesSubject = new BehaviorSubject<number | null>(null);
+
+  tries$: Observable<number | null> = this.triesSubject.asObservable();
+
   constructor(private route: ActivatedRoute,
     private store: Store<IAppState>,
     public dialog: MatDialog) { }
@@ -47,7 +51,7 @@ export class WordContainerComponent implements OnInit {
           if (!word) {
             return '';
           }
-          return `${environment.appUrl}/word/${this.language}/${word.guid}`;
+          return `${environment.appUrl}/#/word/${this.language}/${word.guid}`;
         }));
         this.hasWord$ = this.store.pipe(select(selectHasWord));
       }
@@ -57,6 +61,10 @@ export class WordContainerComponent implements OnInit {
 
   }
 
+  onSolved(tries: number) {
+    this.triesSubject.next(tries);
+  }
+
   addWord() {
     const dialogRef = this.dialog.open(AddWordComponent, {
       width: '90vw',
@@ -64,7 +72,7 @@ export class WordContainerComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.store.dispatch(wordActions.addWord({ language: result.language, word: result.word }))
+        this.store.dispatch(wordActions.addWord({ language: result.language, word: result.word, description: result.description }))
       }
     });
   }

@@ -11,6 +11,9 @@ export class ShareButtonsComponent implements OnInit {
   @Input()
   public wordUrl$!: Observable<string>;
 
+  @Input()
+  public tries$!: Observable<number | null>;
+
   constructor() { }
 
   ngOnInit(): void {

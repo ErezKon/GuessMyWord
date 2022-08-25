@@ -22,6 +22,9 @@ export class WordComponent implements OnInit {
   @Output()
   public playAnotherWord = new EventEmitter<void>();
 
+  @Output()
+  public solvedInTries = new EventEmitter<number>();
+
   activeI: number = 0;
 
   activeJ: number = 0;
@@ -68,6 +71,7 @@ export class WordComponent implements OnInit {
       const guessedWord = this.letters[this.activeI].join('');
       if (guessedWord === this.word?.word) {
         this.solved = true;
+        this.solvedInTries.emit(this.activeI + 1);
         const usedIds: string[] = JSON.parse(localStorage.getItem('ids') as string) ?? [];
         localStorage.setItem('ids', JSON.stringify([...usedIds, this.word.id]));
         return;
