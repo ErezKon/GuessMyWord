@@ -12,6 +12,7 @@ import { Blacklist } from 'src/models/blacklist.model';
 export class AddWordComponent implements OnInit, OnDestroy {
 
   word: string = '';
+  description!: string;
 
   disableAddWord = true;
 
@@ -53,7 +54,7 @@ export class AddWordComponent implements OnInit, OnDestroy {
   }
 
   addWord() {
-    const blacklist = this.blacklist.get(this.selectedLanguage);
+    const blacklist = this.blacklist?.get(this.selectedLanguage) ?? {forbiddenWords: []};
     const forbidden = blacklist?.forbiddenWords.find(w => w === this.word);
     if(forbidden) {
       this.forbidden = true;
@@ -62,7 +63,7 @@ export class AddWordComponent implements OnInit, OnDestroy {
     } else {
       this.forbidden = false;
     }
-    this.dialogRef.close({word:this.word, language: this.selectedLanguage});
+    this.dialogRef.close({word:this.word, language: this.selectedLanguage, description: this.description});
   }
 
   onSelectionChange(event: any) {

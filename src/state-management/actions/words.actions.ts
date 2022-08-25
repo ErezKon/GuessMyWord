@@ -18,7 +18,7 @@ export const getWordFailure = createAction('[Words] Get Word Failure');
 // export const getAllWordsFailure  = createAction('[Words] Get All Words Failure');
 
 export const addWord = createAction('[Words] Add Word',
-props<{ language: string; word: string }>());
+props<{ language: string; word: string, description?: string }>());
 export const addWordSuccess = createAction('[Words] Add Word Success',
 props<{ word: Word }>());
 export const addWordFailure = createAction('[Words] Add Word Failure');

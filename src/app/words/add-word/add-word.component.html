@@ -1,5 +1,5 @@
 <div class="dialog-tool">
-  <span class="dialog-title">{{ 'ADD_NEW_WORD' | translateAsync }}</span>
+  <span class="dialog-title">{{ 'ADD_WORD_TITLE' | translateAsync }}</span>
 </div>
 <mat-dialog-content>
 <app-language-selector [(value)]="selectedLanguage" (selectionChange)="onSelectionChange($event)"></app-language-selector>
@@ -8,6 +8,10 @@
     {{word}}
   </div>
 </div>
+<mat-form-field class="word-description" appearance="fill">
+  <mat-label> {{ 'DESCRIPTION' | translateAsync}} </mat-label>
+  <input matInput placeholder="{{ 'DESC_PLACEHOLDER' | translateAsync }}" [(ngModel)]="description"/>
+</mat-form-field>
 <app-keyboard [language$]="lang.asObservable()" (keyPressed)="onKeyPressed($event)" (delete)="onDelete()"></app-keyboard>
 </mat-dialog-content>
 <mat-dialog-actions>

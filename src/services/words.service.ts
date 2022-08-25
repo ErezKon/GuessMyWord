@@ -41,18 +41,18 @@ export class WordsService implements OnDestroy {
 
   }
 
-  addWord(language: string, word: string): Observable<Word> {
-    return this.httpClient.post<Word>(`${this.baseUrl}/api/Words/AddWord`, {word: word, language: language});
+  addWord(language: string, word: string, description?: string): Observable<Word> {
+    return this.httpClient.post<Word>(`${this.baseUrl}/api/Words/AddWord`, { word: word, language: language, description: description ?? ''});
   }
 
   getWord(request: GetWordReqest): Observable<Word> {
-    return this.demoWord$;
+    //return this.demoWord$;
     if (!request.id && !request.guid) {
       return of({} as Word);
     }
     const withMetaData = request.withMetadata ? true : false;
     let url: string;
-    if(request.id) {
+    if (request.id) {
       url = `${this.baseUrl}/api/Words/GetWord?id=${request.id}&withMetadata=${withMetaData}`;
     } else {
       url = `${this.baseUrl}/api/Words/GetWord?guid=${request.guid}&withMetadata=${withMetaData}`;
@@ -61,11 +61,11 @@ export class WordsService implements OnDestroy {
   }
 
   getRandomWord(language: string, length?: number): Observable<Word> {
-    return this.demoWord$;
-   let url = `${this.baseUrl}/api/Words/GetRandomWord?language=${language}`;
-   if(length) {
-    url = `${url}&length=${length}`;
-   }
-   return this.httpClient.get<Word>(url);
+    //return this.demoWord$;
+    let url = `${this.baseUrl}/api/Words/GetRandomWord?language=${language}`;
+    if (length) {
+      url = `${url}&length=${length}`;
+    }
+    return this.httpClient.get<Word>(url);
   }
 }
