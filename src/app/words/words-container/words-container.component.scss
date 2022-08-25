@@ -7,4 +7,19 @@
     align-items: center;
     color: red;
   }
+
+
+}
+
+.length-selector {
+  .length-selector-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .length-selector-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

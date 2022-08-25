@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { map, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Word } from 'src/models/word.model';
 import { selectLoading, selectWord, selectHasWord } from 'src/state-management/selectors/words.selector';
@@ -9,8 +9,7 @@ import { IAppState } from 'src/state-management/states/app.state';
 import { AddWordComponent } from '../add-word/add-word.component';
 
 import * as wordsActions from '../../../state-management/actions/words.actions';
-import { equals } from 'src/app/utils/functions/array.equals';
-import { Router } from '@angular/router';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-words-container',
@@ -35,6 +34,12 @@ export class WordsContainerComponent implements OnInit {
 
   wordUrl$!: Observable<string>;
 
+  lengths: number[] = [];
+
+  private triesSubject = new BehaviorSubject<number | null>(null);
+
+  tries$: Observable<number | null> = this.triesSubject.asObservable();
+
   constructor(private store: Store<IAppState>,
     public dialog: MatDialog) { }
 
@@ -47,8 +52,14 @@ export class WordsContainerComponent implements OnInit {
       if (!word) {
         return '';
       }
-      return `${environment.appUrl}/word/${word.language}/${word.guid}`;
+      return `${environment.appUrl}/#/word/${word.language}/${word.guid}`;
     }));
+    const minLength = environment.minLength;
+    const maxLength = environment.maxLength;
+
+    for(let i = minLength; i <= maxLength; i++) {
+      this.lengths.push(i);
+    }
   }
 
   addWord() {
@@ -58,17 +69,27 @@ export class WordsContainerComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.store.dispatch(wordsActions.addWord({ language: result.language, word: result.word }));
+        this.store.dispatch(wordsActions.addWord({ language: result.language, word: result.word, description: result.description }));
       }
     });
   }
 
+  onSolved(tries: number) {
+    this.triesSubject.next(tries);
+  }
+
   onSelectionChange(event: any) {
     this.selectedLanguage = event.value;
+    this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage, length: this.selectedLength}));
   }
 
   onPlayAnotherWord() {
-    this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage, length: this.selectedLength}))
+    this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage, length: this.selectedLength}));
+  }
+
+  onLengthChanged(event: MatButtonToggleChange) {
+    this.selectedLength = event.value;
+    this.store.dispatch(wordsActions.getRandomWord({language: this.selectedLanguage, length: this.selectedLength}));
   }
 
 }

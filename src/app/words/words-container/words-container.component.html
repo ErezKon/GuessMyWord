@@ -3,12 +3,26 @@
     <app-language-selector [(value)]="selectedLanguage" (selectionChange)="onSelectionChange($event)">
     </app-language-selector>
   </div>
+  <div class="length-selector">
+    <div class="length-selector-title">
+      {{ 'SELECT_LENGTH' | translateAsync }}
+    </div>
+    <div class="length-selector-toggle">
+      <mat-button-toggle-group name="length-selector" aria-label="Word Length Selector" [value]="selectedLength" (change)="onLengthChanged($event)">
+        <mat-button-toggle *ngFor="let length of lengths" [value]="length">{{ length }}</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+  </div>
   <div class="words" *ngIf="!(loading$ | async); else loading;">
-    <app-word *ngIf="(hasWord$ | async); else noWord;" [word]="word$ | async" [language]="selectedLanguage"
-      (playAnotherWord)="onPlayAnotherWord()"></app-word>
+    <app-word *ngIf="(hasWord$ | async); else noWord;"
+      [word]="word$ | async"
+      [language]="selectedLanguage"
+      (playAnotherWord)="onPlayAnotherWord()"
+      (solvedInTries)="onSolved($event)"></app-word>
   </div>
   <div class="float-button float-right" *ngIf="(hasWord$ | async)">
-    <app-share-buttons [wordUrl$]="wordUrl$"></app-share-buttons>
+    <app-share-buttons [wordUrl$]="wordUrl$" [tries$]="tries$"></app-share-buttons>
   </div>
   <div class="float-button float-left">
     <button
