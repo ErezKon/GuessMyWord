@@ -16,5 +16,11 @@
   "MORE_LETTERS": "The letter is in the correct location, but there are more locations.",
   "FORBIDDEN": "The selected word is forbidden. Please choose a new word.",
   "ADD_WORD": "Add word",
-  "ADD_WORD_TITLE": "Add new word"
+  "ADD_WORD_TITLE": "Add new word",
+  "SELECT_LENGTH": "Select word's length",
+  "WORD_ADDED": "Word added successfully, redirecting to word's page.",
+  "GET_WORD_FAILED": "Failed to get word.",
+  "ADD_WORD_FAILED": "Failed to add word.",
+  "DESCRIPTION": "Description",
+  "DESC_PLACEHOLDER": "Describe the word"
 }

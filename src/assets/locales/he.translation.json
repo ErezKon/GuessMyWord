@@ -16,5 +16,11 @@
   "MORE_LETTERS": "האות במיקום הנכון אך ישנן עוד מופעים.",
   "FORBIDDEN": "האות לא תקינה. אנא בחר אות חדשה.",
   "ADD_WORD": "הוסף מילה",
-  "ADD_WORD_TITLE": "הוסף מילה חדשה"
+  "ADD_WORD_TITLE": "הוסף מילה חדשה",
+  "SELECT_LENGTH": "בחר את אורך המילה",
+  "WORD_ADDED": "המילה נוספה בהצלחה, מפנה לדף המילה.",
+  "GET_WORD_FAILED": "שגיאה בקבלת המילה.",
+  "ADD_WORD_FAILED": "שגיאה בהוספת המילה.",
+  "DESCRIPTION": "תיאור",
+  "DESC_PLACEHOLDER": "תאר את המילה"
 }
